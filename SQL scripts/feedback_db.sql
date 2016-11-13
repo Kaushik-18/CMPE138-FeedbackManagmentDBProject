@@ -1,80 +1,93 @@
-create database cmpe138_project_team3_feedback;
-use cmpe138_project_team3_feedback;
+DROP DATABASE IF EXISTS cmpe138_project_team3_feedback;
+CREATE DATABASE cmpe138_project_team3_feedback;
+USE cmpe138_project_team3_feedback;
 
-create table customer
-	(customer_id	int(15) primary key AUTO_INCREMENT,
-	 customer_name	varchar(100)
-	);
-    
-create table product 
-	( product_name  varchar(100),
-	  product_id 	int(15) primary key AUTO_INCREMENT
- ); 
- 
- create table service 
-	( service_id 	 int(15) primary key AUTO_INCREMENT,
-	  service_name   varchar(100)
+CREATE TABLE customer
+(
+  customer_id   INT(15)       PRIMARY KEY AUTO_INCREMENT,
+  customer_name VARCHAR(100)
 );
 
-create table service_feedback
-(id numeric(15)  	primary key AUTO_INCREMENT,
- ratings 			int(2),
- comments 			varchar(500),
- customer_id 		int(15),
- service_id 		int(15),
- foreign key (customer_id) references customer(customer_id) on delete cascade,
- foreign key (service_id) references service(service_id) on delete cascade
- );
- 
- create table product_feedback
- (id 			numeric(15) primary key AUTO_INCREMENT,
- ratings 		int(2),
- customer_id 	int(15),
- product_id 	int(15),
- foreign key   (customer_id) references customer(customer_id) on delete cascade,
- foreign key   (product_id) references product(product_id) on delete cascade
- );
- 
- create table employee
- (id int(15)    primary key AUTO_INCREMENT,
-  employee_name varchar(100) not null,
-  franchise_id  int(15) not null,
-  manager_id    int(15) null,
-  foreign key (franchise_id) references franchise(id) 
- );
- 
- create table franchise 
- ( id int(15)  primary key AUTO_INCREMENT,
-   location    varchar(255) not null ,
-   manager_id  int(15) null,
-   foreign key (manager_id) references employee(id) 
- );
- 
- create table sold_by
- (  product_id   int(15) not null,
-    franchise_id int(15) not null,
-    foreign key  (product_id) references product(product_id) on delete cascade,
-	foreign key  (franchise_id) references franchise(id) 
- );
- 
- create table service_provided_by
- ( service_id   int(15) not null,
-   employee_id  int(15) not null,
-   foreign key  (service_id) references service(service_id) on delete cascade, 
-   foreign key  (employee_id) references employee(id)
- );
- 
- create table action_items
- ( id                  int(15) primary key AUTO_INCREMENT,
-   start_date          timestamp not null,
-   end_date            timestamp not null ,
-   action_status       varchar(15)not null,
-   created_by          int(15) not null,
-   assigned_to         int(15) not null,
-   comments            varchar(300),
-   service_feedback_id int(15),
-   product_feedback_id int(15),
-   foreign key (service_feedback_id) references service_feedback(id),
-   foreign key (product_feedback_id) references product_feedback(id)
- )
+CREATE TABLE product
+(
+  product_id   INT(15)        PRIMARY KEY AUTO_INCREMENT,
+  product_name VARCHAR(100)   NOT NULL UNIQUE
+);
 
+CREATE TABLE service
+(
+  service_id   INT(15)        PRIMARY KEY AUTO_INCREMENT,
+  service_name VARCHAR(100)   NOT NULL UNIQUE
+);
+
+CREATE TABLE service_feedback
+(
+  service_feedback_id INT(15)       PRIMARY KEY AUTO_INCREMENT,
+  ratings             INT(2),
+  comments            VARCHAR(500),
+  customer_id         INT(15),
+  service_id          INT(15),
+  FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE CASCADE,
+  FOREIGN KEY (service_id) REFERENCES service (service_id) ON DELETE CASCADE
+);
+
+CREATE TABLE product_feedback
+(
+  product_feedback_id INT(15)   PRIMARY KEY AUTO_INCREMENT,
+  ratings             INT(2),
+  customer_id         INT(15),
+  product_id          INT(15),
+  FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE CASCADE,
+  FOREIGN KEY (product_id) REFERENCES product (product_id) ON DELETE CASCADE
+);
+
+CREATE TABLE employee
+(
+  employee_id   INT(15)       PRIMARY KEY AUTO_INCREMENT,
+  employee_name VARCHAR(100)  NOT NULL,
+  franchise_id  INT(15)       NOT NULL,
+  manager_id    INT(15)       NULL
+);
+
+CREATE TABLE franchise
+(
+  franchise_id INT(15)      PRIMARY KEY AUTO_INCREMENT,
+  location     VARCHAR(255) NOT NULL,
+  manager_id   INT(15)      NULL,
+  FOREIGN KEY (manager_id) REFERENCES employee (employee_id)
+);
+
+CREATE TABLE sold_by
+(
+  product_id   INT(15) NOT NULL,
+  franchise_id INT(15) NOT NULL,
+  FOREIGN KEY (product_id) REFERENCES product (product_id),
+  FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id)
+);
+
+CREATE TABLE service_provided_by
+(
+  service_id  INT(15) NOT NULL,
+  employee_id INT(15) NOT NULL,
+  FOREIGN KEY (service_id) REFERENCES service (service_id) ON DELETE CASCADE,
+  FOREIGN KEY (employee_id) REFERENCES employee (employee_id)
+);
+
+CREATE TABLE action_items
+(
+  action_item_id      INT(15)     PRIMARY KEY AUTO_INCREMENT,
+  start_date          DATETIME   NOT NULL,
+  end_date            DATETIME   NOT NULL,
+  action_status       VARCHAR(15) NOT NULL,
+  created_by          INT(15)     NOT NULL,
+  assigned_to         INT(15)     NOT NULL,
+  comments            VARCHAR(300),
+  service_feedback_id INT(15),
+  product_feedback_id INT(15),
+  FOREIGN KEY (service_feedback_id) REFERENCES service_feedback (service_feedback_id),
+  FOREIGN KEY (product_feedback_id) REFERENCES product_feedback (product_feedback_id)
+);
+
+ALTER TABLE cmpe138_project_team3_feedback.employee
+  ADD CONSTRAINT franchise_manager_id
+FOREIGN KEY (manager_id) REFERENCES franchise (franchise_id);
