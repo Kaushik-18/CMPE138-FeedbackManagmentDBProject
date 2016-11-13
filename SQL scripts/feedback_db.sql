@@ -58,8 +58,9 @@ CREATE TABLE employee
 CREATE TABLE franchise
 (
   franchise_id INT(15) PRIMARY KEY AUTO_INCREMENT,
+  name         VARCHAR(100) NOT NULL,
   st_address   VARCHAR(200) NOT NULL,
-  address      VARCHAR(50)  NOT NULL,
+  address      VARCHAR(50)  NULL,
   city         VARCHAR(50)  NOT NULL,
   state        VARCHAR(50)  NOT NULL,
   zip          NUMERIC(5)   NOT NULL,
