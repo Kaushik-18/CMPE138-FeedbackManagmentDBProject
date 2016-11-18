@@ -18,6 +18,9 @@ class Entity(object):
         """for all variable in the (respective) class, it checks if not None and fires
         an SQL INSERT query to persist (or rollback and some custom Exception)"""
         raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
+    def prettyPrint(self):
+        """Optional function.
+        Should return a pretty String to be displayed to the user"""
 
 class Customer(Entity):
     id = 0
@@ -76,6 +79,7 @@ class Service(Entity):
 
 
 class Feedback(Entity):
+    """abstract"""
     id = 0
     rating = 0
     comments = ""
@@ -87,6 +91,14 @@ class Feedback(Entity):
         self.comments = comments
         self.customer_id = customer_id
         self.item_id = item_id
+
+class ProductFeedback(Feedback):
+    pass
+
+class ServiceFeedback(Feedback):
+    pass
+
+
 
 
 @app.route("/")
