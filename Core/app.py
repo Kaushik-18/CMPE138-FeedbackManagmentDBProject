@@ -12,8 +12,14 @@ app.config['MYSQL_DATABASE_DB'] = 'LabelInfo'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
+class Entity(object):
+    """Abstract base class for all Entities"""
+    def persist(self):
+        """for all variable in the (respective) class, it checks if not None and fires
+        an SQL INSERT query to persist (or rollback and some custom Exception)"""
+        raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
 
-class Customer(object):
+class Customer(Entity):
     id = 0
     name = ""
 
@@ -21,7 +27,7 @@ class Customer(object):
         self.name = name
 
 
-class Employee(object):
+class Employee(Entity):
     id = 0
     name = ""
     franchise_id = 0
@@ -33,7 +39,7 @@ class Employee(object):
         self.franchise_id = franchise_id
 
 
-class Franchise(object):
+class Franchise(Entity):
     id = 0
     name = ""
     st_address = ""
@@ -53,7 +59,7 @@ class Franchise(object):
         self.manager_id = manager_id
 
 
-class Product(object):
+class Product(Entity):
     id = 0
     name = ""
 
@@ -61,7 +67,7 @@ class Product(object):
         self.name = name
 
 
-class Service(object):
+class Service(Entity):
     id = 0
     name = ""
 
@@ -69,7 +75,7 @@ class Service(object):
         self.name = name
 
 
-class Feedback(object):
+class Feedback(Entity):
     id = 0
     rating = 0
     comments = ""
