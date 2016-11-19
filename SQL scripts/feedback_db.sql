@@ -40,6 +40,7 @@ CREATE TABLE product_feedback
   ratings             INT(2),
   customer_id         INT(15),
   product_id          INT(15),
+  comments            VARCHAR(500),
   FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
     ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES product (product_id)

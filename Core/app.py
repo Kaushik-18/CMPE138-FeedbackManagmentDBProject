@@ -1,9 +1,6 @@
-from flask import Flask
-import os, logging
-from flask.ext.mysql import MySQL
-import json
+# from flask.ext.mysql import MySQL
 
-app = Flask(__name__)
+"""
 mysql = MySQL()
 
 app.config['MYSQL_DATABASE_USER'] = 'root'
@@ -11,17 +8,32 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'admin'
 app.config['MYSQL_DATABASE_DB'] = 'LabelInfo'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+"""
 
+class Entity(object):
+    """Abstract base class for all Entities"""
+    def persist(self):
+        """for all variable in the (respective) class, it checks if not None and fires
+        an SQL INSERT query to persist (or rollback and some custom Exception)"""
+        # print ("inside Entity.persist()")
+        raise NotImplementedError("Class %s does not (yet) implement method persist()" % (self.__class__.__name__))
+    def prettyPrint(self):
+        # After thought: should be replaced by overriding __str__
+        """Optional function.
+        Should return a pretty String to be displayed to the user"""
 
-class Customer(object):
+class Customer(Entity):
     id = 0
     name = ""
 
     def __init__(self, name):
         self.name = name
 
+    def __repr__(self):
+        pass
 
-class Employee(object):
+
+class Employee(Entity):
     id = 0
     name = ""
     franchise_id = 0
@@ -33,7 +45,7 @@ class Employee(object):
         self.franchise_id = franchise_id
 
 
-class Franchise(object):
+class Franchise(Entity):
     id = 0
     name = ""
     st_address = ""
@@ -41,7 +53,7 @@ class Franchise(object):
     city = ""
     state = ""
     zip = ""
-    manager_id = 0;
+    manager_id = 0
 
     def __init__(self, name, st_address, address, city, state, zip, manager_id):
         self.name = name
@@ -53,7 +65,7 @@ class Franchise(object):
         self.manager_id = manager_id
 
 
-class Product(object):
+class Product(Entity):
     id = 0
     name = ""
 
@@ -61,7 +73,7 @@ class Product(object):
         self.name = name
 
 
-class Service(object):
+class Service(Entity):
     id = 0
     name = ""
 
@@ -69,7 +81,8 @@ class Service(object):
         self.name = name
 
 
-class Feedback(object):
+class Feedback(Entity):
+    """abstract"""
     id = 0
     rating = 0
     comments = ""
@@ -82,7 +95,26 @@ class Feedback(object):
         self.customer_id = customer_id
         self.item_id = item_id
 
+    def __init__(self):
+        pass
 
-@app.route("/")
-def index():
-    return ""
+class ProductFeedback(Feedback):
+    # won't work
+    # TODO overloaded constructors python
+    def __init__(self, rating, comments, customer_id, item_id):
+        # proably wrong super syntax
+        super(ProductFeedback, self).__init__(rating, comments, customer_id, item_id)
+
+    def __init__(self):
+        super(ProductFeedback, self).__init__()
+        pass
+
+    def __str__(self):
+        pass
+        # TODO
+#return 'foooooProductFeedback'
+
+class ServiceFeedback(Feedback):
+    def __repr__(self):
+        pass
+
