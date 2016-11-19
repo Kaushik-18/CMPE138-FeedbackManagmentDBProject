@@ -43,6 +43,8 @@ class Cli:
             actions.productFeedback(self, cust_id=cust_id)
         elif inp == 2:
             actions.serviceFeedback(self, cust_id=cust_id)
+        elif inp == 0:
+            self.mainLoop()
         else:
             print 'Invalid option. Exiting now'
             sys.exit(0)
@@ -83,6 +85,8 @@ class Cli:
             actions.listActionItems(self, action_status='closed')
         elif inp == 3:
             actions.listActionItems(self)
+        elif inp == 0:
+            self.mainLoop()
         else:
             print 'Invalid option. Exiting now'
             sys.exit(0)
