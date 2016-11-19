@@ -45,7 +45,7 @@ class Cli:
             print 'Invalid option. Exiting now'
             sys.exit(0)
 
-            # TODO: implement back on inp ==0
+            # TODO: implement back on inp == 0
 
     def empLogin(self):
         prompt = 'Enter employee ID: '
