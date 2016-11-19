@@ -110,6 +110,7 @@ class ProductFeedback(Feedback):
         pass
 
     def __str__(self):
+        pass
         # TODO
 #return 'foooooProductFeedback'
 
