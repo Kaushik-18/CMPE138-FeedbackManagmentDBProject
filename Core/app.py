@@ -15,8 +15,8 @@ class Entity(object):
     def persist(self):
         """for all variable in the (respective) class, it checks if not None and fires
         an SQL INSERT query to persist (or rollback and some custom Exception)"""
-        print ("inside Entity.persist()")
-        # raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
+        # print ("inside Entity.persist()")
+        raise NotImplementedError("Class %s does not (yet) implement method persist()" % (self.__class__.__name__))
     def prettyPrint(self):
         # After thought: should be replaced by overriding __str__
         """Optional function.
@@ -111,7 +111,7 @@ class ProductFeedback(Feedback):
 
     def __str__(self):
         # TODO
-        return 'foooooProductFeedback'
+#return 'foooooProductFeedback'
 
 class ServiceFeedback(Feedback):
     def __repr__(self):
