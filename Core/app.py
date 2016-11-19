@@ -1,7 +1,5 @@
 from flask import Flask
-import os, logging
 from flask.ext.mysql import MySQL
-import json
 
 app = Flask(__name__)
 mysql = MySQL()
@@ -19,6 +17,7 @@ class Entity(object):
         an SQL INSERT query to persist (or rollback and some custom Exception)"""
         raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
     def prettyPrint(self):
+        # After thought: should be replaced by overriding __repr__
         """Optional function.
         Should return a pretty String to be displayed to the user"""
 
@@ -28,6 +27,9 @@ class Customer(Entity):
 
     def __init__(self, name):
         self.name = name
+
+    def __repr__(self):
+        pass
 
 
 class Employee(Entity):
@@ -50,7 +52,7 @@ class Franchise(Entity):
     city = ""
     state = ""
     zip = ""
-    manager_id = 0;
+    manager_id = 0
 
     def __init__(self, name, st_address, address, city, state, zip, manager_id):
         self.name = name
@@ -93,13 +95,12 @@ class Feedback(Entity):
         self.item_id = item_id
 
 class ProductFeedback(Feedback):
-    pass
+    def __repr__(self):
+        pass
 
 class ServiceFeedback(Feedback):
-    pass
-
-
-
+    def __repr__(self):
+        pass
 
 @app.route("/")
 def index():
