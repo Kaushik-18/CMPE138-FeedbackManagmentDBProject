@@ -11,6 +11,7 @@ class Cli:
     def customerFeedback(self):
         prompt = ' Enter customer ID: '
         cust_id = int(raw_input(prompt))
+        """
         db = Core.DB.DB()
         custList = db.query('Customer', '{"id" : "' + str(cust_id)
                             + '"}')
@@ -30,6 +31,7 @@ class Cli:
 
         cust = custList[0]
         print cust
+        """
         prompt = ("\n"
                   "		Enter action:\n"
                   "			1. Product feedback\n"

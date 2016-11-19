@@ -1,7 +1,6 @@
-from flask import Flask
-from flask.ext.mysql import MySQL
+# from flask.ext.mysql import MySQL
 
-app = Flask(__name__)
+"""
 mysql = MySQL()
 
 app.config['MYSQL_DATABASE_USER'] = 'root'
@@ -9,15 +8,17 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'admin'
 app.config['MYSQL_DATABASE_DB'] = 'LabelInfo'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+"""
 
 class Entity(object):
     """Abstract base class for all Entities"""
     def persist(self):
         """for all variable in the (respective) class, it checks if not None and fires
         an SQL INSERT query to persist (or rollback and some custom Exception)"""
-        raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
+        print ("inside Entity.persist()")
+        # raise NotImplementedError("Class %s does not (yet) implement method persist()" %(self.__class__.__name__))
     def prettyPrint(self):
-        # After thought: should be replaced by overriding __repr__
+        # After thought: should be replaced by overriding __str__
         """Optional function.
         Should return a pretty String to be displayed to the user"""
 
@@ -94,14 +95,25 @@ class Feedback(Entity):
         self.customer_id = customer_id
         self.item_id = item_id
 
-class ProductFeedback(Feedback):
-    def __repr__(self):
+    def __init__(self):
         pass
+
+class ProductFeedback(Feedback):
+    # won't work
+    # TODO overloaded constructors python
+    def __init__(self, rating, comments, customer_id, item_id):
+        # proably wrong super syntax
+        super(ProductFeedback, self).__init__(rating, comments, customer_id, item_id)
+
+    def __init__(self):
+        super(ProductFeedback, self).__init__()
+        pass
+
+    def __str__(self):
+        # TODO
+        return 'foooooProductFeedback'
 
 class ServiceFeedback(Feedback):
     def __repr__(self):
         pass
 
-@app.route("/")
-def index():
-    return ""
