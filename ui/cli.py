@@ -8,29 +8,29 @@ import actions
 # TODO: define the methods for db access and printing in separate class, keep only flow related code in cli.py
 
 class Cli:
-    def customerFeedback(self):
+    def show_customer_feedback_entry(self):
         prompt = ' Enter customer ID: '
         cust_id = int(raw_input(prompt))
 
-        db = Core.DB.DB()
-        custList = db.query('Customer', '{"id" : "' + str(cust_id)
-                            + '"}')
-        db.close()
-
-        # Error cases
-
-        if len(custList) > 1:
-            print 'Fatal Error: Duplicate Customer IDs present!!!!'
-            sys.exit(1)
-        elif len(custList) == 0:
-            print 'No customer with ID ' + str(cust_id)
-            print 'Try again'
-            self.customerFeedback()
-
-        # everything okay
-
-        cust = custList[0]
-        print cust
+        # db = Core.DB.DB()
+        # custList = db.query('Customer', '{"id" : "' + str(cust_id)
+        #                     + '"}')
+        # db.close()
+        #
+        # # Error cases
+        #
+        # if len(custList) > 1:
+        #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
+        #     sys.exit(1)
+        # elif len(custList) == 0:
+        #     print 'No customer with ID ' + str(cust_id)
+        #     print 'Try again'
+        #     self.customerFeedback()
+        #
+        # # everything okay
+        #
+        # cust = custList[0]
+        # print cust
 
         prompt = ("\n"
                   "		Enter action:\n"
@@ -40,18 +40,18 @@ class Cli:
                   "		")
         inp = int(raw_input(prompt))
         if inp == 1:
-            actions.productFeedback(self, cust_id=cust_id)
+            actions.insert_product_feedback(self, cust_id=cust_id)
         elif inp == 2:
-            actions.serviceFeedback(self, cust_id=cust_id)
+            actions.insert_service_feedback(self, cust_id=cust_id)
         elif inp == 0:
-            self.mainLoop()
+            self.show_main_menu()
         else:
             print 'Invalid option. Exiting now'
             sys.exit(0)
 
             # TODO: implement back on inp == 0
 
-    def empLogin(self):
+    def show_emp_login(self):
         prompt = 'Enter employee ID: '
         emp_id = int(raw_input(prompt))
         db = Core.DB.DB()
@@ -66,7 +66,7 @@ class Cli:
         elif len(empList) == 0:
             print 'No employee with ID ' + str(emp_id)
             print 'Try again'
-            self.empLogin()
+            self.show_emp_login()
 
         # everything okay
 
@@ -80,23 +80,26 @@ class Cli:
                   "        		")
         inp = int(raw_input(prompt))
         if inp == 1:
-            actions.listActionItems(self, action_status='open')
+            actions.list_action_items(self, action_status='open')
         elif inp == 2:
-            actions.listActionItems(self, action_status='closed')
+            actions.list_action_items(self, action_status='closed')
         elif inp == 3:
-            actions.listActionItems(self)
+            actions.list_action_items(self)
         elif inp == 0:
-            self.mainLoop()
+            self.show_main_menu()
         else:
             print 'Invalid option. Exiting now'
             sys.exit(0)
 
             # TODO: implement back on inp ==0
 
-    def mgrLogin(self):
+    def show_manager_login(self):
+        # for testing action item add ; in ui show manager option to create service action item or feedback action item
+        db = Core.DB.DB()
+        db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
         pass
 
-    def mainLoop(self):
+    def show_main_menu(self):
         prompt = \
             """
 		Enter action:
@@ -109,15 +112,15 @@ class Cli:
         if inp == None:
             print 'invalid input'
         elif inp == 1:
-            self.customerFeedback()
+            self.show_customer_feedback_entry()
         elif inp == 2:
-            self.empLogin()
+            self.show_emp_login()
         elif inp == 3:
-            self.mgrLogin()
+            self.show_manager_login()
         else:
             print 'invalid input'
 
 
 if __name__ == '__main__':
     cli = Cli()
-    cli.mainLoop()
+    cli.show_main_menu()
