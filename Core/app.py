@@ -1,26 +1,20 @@
-# from flask.ext.mysql import MySQL
+import Core.DB
 
-"""
-mysql = MySQL()
-
-app.config['MYSQL_DATABASE_USER'] = 'root'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'admin'
-app.config['MYSQL_DATABASE_DB'] = 'LabelInfo'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
-mysql.init_app(app)
-"""
 
 class Entity(object):
     """Abstract base class for all Entities"""
+
     def persist(self):
         """for all variable in the (respective) class, it checks if not None and fires
         an SQL INSERT query to persist (or rollback and some custom Exception)"""
         # print ("inside Entity.persist()")
-        raise NotImplementedError("Class %s does not (yet) implement method persist()" % (self.__class__.__name__))
-    def prettyPrint(self):
-        # After thought: should be replaced by overriding __str__
-        """Optional function.
-        Should return a pretty String to be displayed to the user"""
+        # raise NotImplementedError("Class %s does not (yet) implement method persist()" % (self.__class__.__name__))
+
+        # def prettyPrint(self):
+        #     # After thought: should be replaced by overriding __str__
+        #     """Optional function.
+        #     Should return a pretty String to be displayed to the user"""
+
 
 class Customer(Entity):
     id = 0
@@ -82,39 +76,35 @@ class Service(Entity):
 
 
 class Feedback(Entity):
-    """abstract"""
-    id = 0
-    rating = 0
-    comments = ""
-    customer_id = 0
-    item_id = 0
-
-    def __init__(self, rating, comments, customer_id, item_id):
+    def __init__(self, rating, comments, customer_id, item_id, franchise_id):
         self.rating = rating
         self.comments = comments
         self.customer_id = customer_id
         self.item_id = item_id
+        self.franchise_id = franchise_id
 
-    def __init__(self):
-        pass
 
 class ProductFeedback(Feedback):
-    # won't work
-    # TODO overloaded constructors python
-    def __init__(self, rating, comments, customer_id, item_id):
-        # proably wrong super syntax
-        super(ProductFeedback, self).__init__(rating, comments, customer_id, item_id)
-
-    def __init__(self):
-        super(ProductFeedback, self).__init__()
-        pass
+    def __init__(self, rating=0, comments="", customer_id=0, item_id=0, franchise_id=0):
+        super(ProductFeedback, self).__init__(rating, comments, customer_id, item_id, franchise_id)
 
     def __str__(self):
         pass
-        # TODO
-#return 'foooooProductFeedback'
+
+    def persist(self):
+        db = Core.DB.DB()
+        db.insert_feedback_record("product",
+                                  (self.rating, self.customer_id, self.item_id, self.comments, self.franchise_id))
+
 
 class ServiceFeedback(Feedback):
-    def __repr__(self):
+    def __init__(self, rating=0, comments="", customer_id=0, item_id=0, franchise_id=0):
+        super(ServiceFeedback, self).__init__(rating, comments, customer_id, item_id, franchise_id)
+
+    def __str__(self):
         pass
 
+    def persist(self):
+        db = Core.DB.DB()
+        db.insert_feedback_record("service",
+                                  (self.rating, self.customer_id, self.item_id, self.comments, self.franchise_id))
