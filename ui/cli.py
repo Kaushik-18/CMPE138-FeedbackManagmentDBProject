@@ -96,7 +96,7 @@ class Cli:
     def show_manager_login(self):
         # for testing action item add ; in ui show manager option to create service action item or feedback action item
         db = Core.DB.DB()
-        db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
+        # db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 3), "service")
         pass
 
     def show_main_menu(self):

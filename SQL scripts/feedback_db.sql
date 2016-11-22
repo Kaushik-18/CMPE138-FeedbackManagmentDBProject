@@ -28,7 +28,7 @@ CREATE TABLE service_feedback
   comments            VARCHAR(500),
   customer_id         INT(15),
   service_id          INT(15),
-  francise_id         INT(15),
+  franchise_id        INT(15),
   FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
     ON DELETE CASCADE,
   FOREIGN KEY (service_id) REFERENCES service (service_id)
@@ -42,7 +42,7 @@ CREATE TABLE product_feedback
   customer_id         INT(15),
   product_id          INT(15),
   comments            VARCHAR(500),
-  franchise_id        INT(15), 
+  franchise_id        INT(15),
   FOREIGN KEY (customer_id) REFERENCES customer (customer_id)
     ON DELETE CASCADE,
   FOREIGN KEY (product_id) REFERENCES product (product_id)
@@ -51,7 +51,7 @@ CREATE TABLE product_feedback
 
 CREATE TABLE employee
 (
-  employee_id  INT(15)     PRIMARY KEY AUTO_INCREMENT,
+  employee_id  INT(15) PRIMARY KEY AUTO_INCREMENT,
   f_name       VARCHAR(50) NOT NULL,
   l_name       VARCHAR(50) NOT NULL,
   franchise_id INT(15)     NOT NULL,
@@ -91,20 +91,20 @@ CREATE TABLE service_provided_by
 CREATE TABLE action_items
 (
   action_item_id      INT(15) PRIMARY KEY AUTO_INCREMENT,
-  start_date          DATETIME    NOT NULL,
-  end_date            DATETIME    NOT NULL,
-  action_status       INT(15)     NOT NULL DEFAULT 0,
-  created_by          INT(15)     NOT NULL,
-  assigned_to         INT(15)     NOT NULL,
+  start_date          DATETIME NOT NULL,
+  end_date            DATETIME NOT NULL,
+  action_status       INT(15)  NOT NULL   DEFAULT 0,
+  created_by          INT(15)  NOT NULL,
+  assigned_to         INT(15)  NOT NULL,
   comments            VARCHAR(300),
-  service_feedback_id INT(15),
-  product_feedback_id INT(15),
+  service_feedback_id INT(15)  NULL ,
+  product_feedback_id INT(15)  NULL ,
   FOREIGN KEY (service_feedback_id) REFERENCES service_feedback (service_feedback_id),
   FOREIGN KEY (product_feedback_id) REFERENCES product_feedback (product_feedback_id),
-  FOREIGN KEY (created_by) REFERENCES employee(employee_id),
-  FOREIGN KEY (assigned_to) REFERENCES employee(employee_id)
+  FOREIGN KEY (created_by) REFERENCES employee (employee_id),
+  FOREIGN KEY (assigned_to) REFERENCES employee (employee_id)
 );
 
 ALTER TABLE cmpe138_project_team3_feedback.employee
-  ADD CONSTRAINT 
+  ADD CONSTRAINT
 FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id);
