@@ -38,7 +38,6 @@ def insert_service_feedback(self, cust_id):
         if db.check_service_exists(fb.item_id):
             fb.rating = int(raw_input("Enter rating (1 to 5): "))
             fb.comments = raw_input("Enter feedback: ")
-            print(fb)
             conf = raw_input("Submit the above feedback? (yes or no): ")
             if conf == "yes":
                 fb.persist()
