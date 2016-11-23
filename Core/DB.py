@@ -1,7 +1,10 @@
 import MySQLdb as mysql
+import re
 
 
-class DB:
+class DB(object):
+    _queryString = "SELECT {attributes} FROM {table} {condition}"
+
     def __init__(self):
         self.connection = mysql.connect(user="root", passwd="admin",
                                         db="cmpe138_project_team3_feedback")
@@ -10,10 +13,41 @@ class DB:
         """close connection"""
         self.connection.close()
 
-    def query(self, table, paramsJson=None):
+    def query(self, table, paramsJson=None, attributes="*"):
         """Will execute the query and return rows as a list of objects.
         Return empty list in case of No results"""
-        pass
+        queryString = self.formatQuerySting(table, paramsJson, attributes)
+        cursor = self.connection.cursor()
+        cursor.execute(queryString)
+        retval = None  # TODO get values
+        self.close()
+        return retval
+
+    @classmethod
+    def formatQuerySting(clss, table, paramsJson, attributes):
+        """
+        Return a SQL query string for selecting attributes
+        """
+        assert type(table) == str
+        assert type(paramsJson) == dict
+        assert type(attributes) == str
+        assert re.match("\s*(\*|(\w+,?\s*)+)\s*", attributes)
+
+        if paramsJson:
+            condition = "WHERE "
+            flag = False
+            for key in paramsJson:
+                temp = "%s = %s" % (key, paramsJson[key])
+                if flag:
+                    condition += " AND " + temp
+                else:
+                    condition += temp
+                    flag = True
+        else:
+            condition = ""
+
+        return clss._queryString.format(attributes=attributes, table=table,
+                                        condition=condition)
 
     def insert_feedback_record(self, tablename, values):
         cursor = self.connection.cursor()
