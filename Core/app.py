@@ -5,10 +5,14 @@ class Entity(object):
     """Abstract base class for all Entities"""
 
     def persist(self):
-        """for all variable in the (respective) class, it checks if not None and fires
-        an SQL INSERT query to persist (or rollback and some custom Exception)"""
+        """for all variable in the (respective) class,
+        it checks if not None and fires
+        an SQL INSERT query to persist (or rollback and
+        some custom Exception)"""
         # print ("inside Entity.persist()")
-        # raise NotImplementedError("Class %s does not (yet) implement method persist()" % (self.__class__.__name__))
+        # raise NotImplementedError("Class %s does not (yet) implement"
+        #                           "method persist()" %
+        #                           (self.__class__.__name__))
 
         # def prettyPrint(self):
         #     # After thought: should be replaced by overriding __str__
@@ -17,39 +21,26 @@ class Entity(object):
 
 
 class Customer(Entity):
-    id = 0
-    name = ""
-
     def __init__(self, name):
         self.name = name
+        self.id = None
 
     def __repr__(self):
         pass
 
 
 class Employee(Entity):
-    id = 0
-    name = ""
-    franchise_id = 0
-    manager_id = 0
-
     def __init__(self, name, franchise_id, manager_id):
+        self.id = None
         self.name = name
         self.manager_id = manager_id
         self.franchise_id = franchise_id
 
 
 class Franchise(Entity):
-    id = 0
-    name = ""
-    st_address = ""
-    address = ""
-    city = ""
-    state = ""
-    zip = ""
-    manager_id = 0
-
-    def __init__(self, name, st_address, address, city, state, zip, manager_id):
+    def __init__(self, name, st_address, address, city, state, zip,
+                 manager_id):
+        self.id = None
         self.name = name
         self.st_address = st_address
         self.address = address
@@ -60,18 +51,14 @@ class Franchise(Entity):
 
 
 class Product(Entity):
-    id = 0
-    name = ""
-
     def __init__(self, name):
+        self.id = None
         self.name = name
 
 
 class Service(Entity):
-    id = 0
-    name = ""
-
     def __init__(self, name):
+        self.id = None
         self.name = name
 
 
@@ -85,8 +72,10 @@ class Feedback(Entity):
 
 
 class ProductFeedback(Feedback):
-    def __init__(self, rating=0, comments="", customer_id=0, item_id=0, franchise_id=0):
-        super(ProductFeedback, self).__init__(rating, comments, customer_id, item_id, franchise_id)
+    def __init__(self, rating=0, comments="", customer_id=0, item_id=0,
+                 franchise_id=0):
+        super(ProductFeedback, self).__init__(rating, comments, customer_id,
+                                              item_id, franchise_id)
 
     def __str__(self):
         pass
@@ -94,12 +83,15 @@ class ProductFeedback(Feedback):
     def persist(self):
         db = Core.DB.DB()
         db.insert_feedback_record("product",
-                                  (self.rating, self.customer_id, self.item_id, self.comments, self.franchise_id))
+                                  (self.rating, self.customer_id, self.item_id,
+                                   self.comments, self.franchise_id))
 
 
 class ServiceFeedback(Feedback):
-    def __init__(self, rating=0, comments="", customer_id=0, item_id=0, franchise_id=0):
-        super(ServiceFeedback, self).__init__(rating, comments, customer_id, item_id, franchise_id)
+    def __init__(self, rating=0, comments="", customer_id=0, item_id=0,
+                 franchise_id=0):
+        super(ServiceFeedback, self).__init__(rating, comments, customer_id,
+                                              item_id, franchise_id)
 
     def __str__(self):
         pass
@@ -107,4 +99,5 @@ class ServiceFeedback(Feedback):
     def persist(self):
         db = Core.DB.DB()
         db.insert_feedback_record("service",
-                                  (self.rating, self.customer_id, self.item_id, self.comments, self.franchise_id))
+                                  (self.rating, self.customer_id, self.item_id,
+                                   self.comments, self.franchise_id))
