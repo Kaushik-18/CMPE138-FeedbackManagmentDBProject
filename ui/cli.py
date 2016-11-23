@@ -6,7 +6,8 @@ import Core.app
 import actions
 
 
-# TODO: define the methods for db access and printing in separate class, keep only flow related code in cli.py
+# TODO: define the methods for db access and printing in separate class,
+# keep only flow related code in cli.py
 
 class Cli:
     def show_customer_feedback_entry(self):
@@ -25,37 +26,38 @@ class Cli:
                 else:
                     break
             else:
-                print('Customer ID is a numeric ID number given to each customer.\n'
+                print('Customer ID is a numeric ID number given to each '
+                      'customer.\n'
                       'Please try again.\n')
 
-           # db = Core.DB.DB()
-           # custList = db.query('Customer', '{"id" : "' + str(cust_id)
-           #                     + '"}')
-           # db.close()
-           #
-           # # Error cases
-           #
-           # if len(custList) > 1:
-           #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
-           #     sys.exit(1)
-           # elif len(custList) == 0:
-           #     print 'No customer with ID ' + str(cust_id)
-           #     print 'Try again'
-           #     self.customerFeedback()
-           #
-           # # everything okay
-           #
-           # cust = custList[0]
-           # print cust
+            # db = Core.DB.DB()
+            # custList = db.query('Customer', '{"id" : "' + str(cust_id)
+            #                     + '"}')
+            # db.close()
+            #
+            # # Error cases
+            #
+            # if len(custList) > 1:
+            #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
+            #     sys.exit(1)
+            # elif len(custList) == 0:
+            #     print 'No customer with ID ' + str(cust_id)
+            #     print 'Try again'
+            #     self.customerFeedback()
+            #
+            # # everything okay
+            #
+            # cust = custList[0]
+            # print cust
 
         while 1:
             feedback_type_choice_next_operation = None
             prompt = ("\n"
-                      "		Enter action:\n"
-                      "			1. Product feedback\n"
-                      "			2. Service feedback\n"
-                      "			0. back\n"
-                      "		")
+                      "   Enter action:\n"
+                      "     1. Product feedback\n"
+                      "     2. Service feedback\n"
+                      "     0. back\n"
+                      "   ")
             inp = raw_input(prompt)
             if inp is None:
                 continue
@@ -64,15 +66,21 @@ class Cli:
             elif inp.isdigit():
                 choice = int(inp)
                 if choice == 1:
-                    feedback_type_choice_next_operation = actions.insert_product_feedback(self, customer_id=customer_id)
+                    feedback_type_choice_next_operation = \
+                        actions.insert_product_feedback(
+                            self, customer_id=customer_id)
                 elif choice == 2:
-                    feedback_type_choice_next_operation = actions.insert_service_feedback(self, customer_id=customer_id)
+                    feedback_type_choice_next_operation = \
+                        actions.insert_service_feedback(
+                            self, customer_id=customer_id)
                 elif choice == 0:
                     return 0
                 else:
-                    print('Invalid choice. Please try choosing from the options given.\n')
+                    print('Invalid choice. Please try choosing from'
+                          ' the options given.\n')
             else:
-                print('Please enter the number shown in front of the choices.\n')
+                print('Please enter the number shown in front of the'
+                      ' choices.\n')
             if feedback_type_choice_next_operation == 1:
                 return 1
             elif feedback_type_choice_next_operation == 0:
@@ -94,18 +102,21 @@ class Cli:
                     return 0
                 else:
                     db = Core.DB.DB()
-                    emp_list = db.query('Employee', '{"id" : "' + str(employee_id) + '"}')
+                    emp_list = db.query(
+                        'Employee', '{"id" : "' + str(employee_id) + '"}')
                     db.close()
 
                     if len(emp_list) > 1:
-                        print('Internal Error. Please try contacting the administrator.')
+                        print('Internal Error. Please try contacting '
+                              'the administrator.')
                         return 1
                     elif len(emp_list) == 0:
                         print('No employee with ID ' + str(employee_id) + '\n'
                               'Try again')
                         continue
             else:
-                print('Employee ID is a numeric ID number given to each employee.\n'
+                print('Employee ID is a numeric ID number given to '
+                      'each employee.\n'
                       'Please try again.\n')
 
         emp = emp_list[0]
@@ -116,9 +127,9 @@ class Cli:
             prompt = ("\n"
                       "Enter action:\n"
                       "     1. List all open action items\n"
-                      "	    2. List all closed action items\n"
-                      "	    3. List all action items\n"
-                      "        		")
+                      "     2. List all closed action items\n"
+                      "     3. List all action items\n"
+                      "           ")
             inp = raw_input(prompt)
             if inp is None:
                 continue
@@ -127,26 +138,33 @@ class Cli:
             elif inp.isdigit():
                 choice = int(inp)
                 if choice == 1:
-                    employee_options_next_operation = actions.list_action_items(self, action_status='open')
+                    employee_options_next_operation = \
+                        actions.list_action_items(self, action_status='open')
                 elif choice == 2:
-                    employee_options_next_operation = actions.list_action_items(self, action_status='closed')
+                    employee_options_next_operation = \
+                        actions.list_action_items(self, action_status='closed')
                 elif choice == 3:
-                    employee_options_next_operation = actions.list_action_items(self)
+                    employee_options_next_operation = \
+                        actions.list_action_items(self)
                 elif choice == 0:
                     return 0
                 else:
-                    print('Invalid choice. Please try choosing from the options given.\n')
+                    print('Invalid choice. Please try choosing from the '
+                          'options given.\n')
             else:
-                print('Please enter the number shown in front of the choices.\n')
+                print(
+                    'Please enter the number shown in front of the choices.\n')
             if employee_options_next_operation == 1:
                 return 1
             elif employee_options_next_operation == 0:
                 continue
 
     def show_manager_login(self):
-        # for testing action item add ; in ui show manager option to create service action item or feedback action item
+        # for testing action item add ; in ui show manager option to create
+        # service action item or feedback action item
         db = Core.DB.DB()
-        # db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 3), "service")
+        # db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 3),
+        # "service")
         pass
 
     def show_main_menu(self):
@@ -157,10 +175,10 @@ class Cli:
                       "Press 0 at any screen to go back\n"
                       "Enter action:\n"
                       "     1. Customer feedback\n"
-                      "	    2. Employee login\n"
-                      "	    3. Manager login\n"
-                      "	    #. Exit\n"
-                      "	    0. Exit\n"
+                      "     2. Employee login\n"
+                      "     3. Manager login\n"
+                      "     #. Exit\n"
+                      "     0. Exit\n"
                       "> ")
             inp = raw_input(prompt)
             if inp is None:
@@ -170,7 +188,8 @@ class Cli:
             elif inp.isdigit():
                 choice = int(inp)
                 if choice == 1:
-                    main_menu_next_operation = self.show_customer_feedback_entry()
+                    main_menu_next_operation = \
+                        self.show_customer_feedback_entry()
                 elif choice == 2:
                     main_menu_next_operation = self.show_emp_login()
                 elif choice == 3:
@@ -178,14 +197,16 @@ class Cli:
                 elif choice == 0:
                     return 0
                 else:
-                    print('Invalid choice. Please try choosing from the options given.\n')
+                    print(
+                        'Invalid choice. Please try choosing from the options '
+                        'given.\n')
             else:
-                print('Please enter the number shown in front of the choices.\n')
+                print('Please enter the number shown in front of the'
+                      ' choices.\n')
             if main_menu_next_operation == 1:
                 return 1
             elif main_menu_next_operation == 0:
                 continue
-
 
 
 def show_owner_login(self):
@@ -212,9 +233,9 @@ def show_owner_login(self):
     prompt = ("\n"
               "Enter action:\n"
               "     1. List all open action items\n"
-              "	    2. List all closed action items\n"
-              "	    3. List all action items\n"
-              "        		")
+              "     2. List all closed action items\n"
+              "     3. List all action items\n"
+              "           ")
     inp = int(raw_input(prompt))
     if inp == 1:
         actions.list_action_items(self, action_status='open')
