@@ -70,14 +70,13 @@ class DB:
         finally:
             self.close()
 
-
-def update_action_item(self, values):
-    try:
-        cursor = self.connection.cursor()
-        cursor.execute("UPDATE action_items set action_status=%s where "
-                       "action_item_id=%s", values)
-        self.connection.commit()
-    except mysql.Error:
-        print("Invalid ids entered")
-    finally:
-        self.close()
+    def update_action_item(self, values):
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute("UPDATE action_items set action_status=%s where "
+                           "action_item_id=%s", values)
+            self.connection.commit()
+        except mysql.Error:
+            print("Invalid ids entered")
+        finally:
+            self.close()
