@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 
 import Core.DB
@@ -9,89 +10,138 @@ import actions
 
 class Cli:
     def show_customer_feedback_entry(self):
-        prompt = ' Enter customer ID: '
-        cust_id = int(raw_input(prompt))
+        customer_id = None
+        while 1:
+            prompt = ' Enter customer ID: '
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                customer_id = int(inp)
+                if customer_id == 0:
+                    return 0
+                else:
+                    break
+            else:
+                print('Customer ID is a numeric ID number given to each customer.\n'
+                      'Please try again.\n')
 
-        # db = Core.DB.DB()
-        # custList = db.query('Customer', '{"id" : "' + str(cust_id)
-        #                     + '"}')
-        # db.close()
-        #
-        # # Error cases
-        #
-        # if len(custList) > 1:
-        #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
-        #     sys.exit(1)
-        # elif len(custList) == 0:
-        #     print 'No customer with ID ' + str(cust_id)
-        #     print 'Try again'
-        #     self.customerFeedback()
-        #
-        # # everything okay
-        #
-        # cust = custList[0]
-        # print cust
+           # db = Core.DB.DB()
+           # custList = db.query('Customer', '{"id" : "' + str(cust_id)
+           #                     + '"}')
+           # db.close()
+           #
+           # # Error cases
+           #
+           # if len(custList) > 1:
+           #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
+           #     sys.exit(1)
+           # elif len(custList) == 0:
+           #     print 'No customer with ID ' + str(cust_id)
+           #     print 'Try again'
+           #     self.customerFeedback()
+           #
+           # # everything okay
+           #
+           # cust = custList[0]
+           # print cust
 
-        prompt = ("\n"
-                  "		Enter action:\n"
-                  "			1. Product feedback\n"
-                  "			2. Service feedback\n"
-                  "			0. back\n"
-                  "		")
-        inp = int(raw_input(prompt))
-        if inp == 1:
-            actions.insert_product_feedback(self, cust_id=cust_id)
-        elif inp == 2:
-            actions.insert_service_feedback(self, cust_id=cust_id)
-        elif inp == 0:
-            self.show_main_menu()
-        else:
-            print 'Invalid option. Exiting now'
-            sys.exit(0)
-
-            # TODO: implement back on inp == 0
+        while 1:
+            feedback_type_choice_next_operation = None
+            prompt = ("\n"
+                      "		Enter action:\n"
+                      "			1. Product feedback\n"
+                      "			2. Service feedback\n"
+                      "			0. back\n"
+                      "		")
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                choice = int(inp)
+                if choice == 1:
+                    feedback_type_choice_next_operation = actions.insert_product_feedback(self, customer_id=customer_id)
+                elif choice == 2:
+                    feedback_type_choice_next_operation = actions.insert_service_feedback(self, customer_id=customer_id)
+                elif choice == 0:
+                    return 0
+                else:
+                    print('Invalid choice. Please try choosing from the options given.\n')
+            else:
+                print('Please enter the number shown in front of the choices.\n')
+            if feedback_type_choice_next_operation == 1:
+                return 1
+            elif feedback_type_choice_next_operation == 0:
+                continue
 
     def show_emp_login(self):
-        prompt = 'Enter employee ID: '
-        emp_id = int(raw_input(prompt))
-        db = Core.DB.DB()
-        empList = db.query('Employee', '{"id" : "' + str(emp_id) + '"}')
-        db.close()
+        employee_id = None
+        while 1:
+            emp_list = None
+            prompt = 'Enter employee ID: '
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                employee_id = int(inp)
+                if employee_id == 0:
+                    return 0
+                else:
+                    db = Core.DB.DB()
+                    emp_list = db.query('Employee', '{"id" : "' + str(employee_id) + '"}')
+                    db.close()
 
-        # Error cases
+                    if len(emp_list) > 1:
+                        print('Internal Error. Please try contacting the administrator.')
+                        return 1
+                    elif len(emp_list) == 0:
+                        print('No employee with ID ' + str(employee_id) + '\n'
+                              'Try again')
+                        continue
+            else:
+                print('Employee ID is a numeric ID number given to each employee.\n'
+                      'Please try again.\n')
 
-        if len(empList) > 1:
-            print 'Fatal Error: Duplicate Employee IDs present!!!!'
-            sys.exit(1)
-        elif len(empList) == 0:
-            print 'No employee with ID ' + str(emp_id)
-            print 'Try again'
-            self.show_emp_login()
-
-        # everything okay
-
-        emp = empList[0]
-        print emp
-        prompt = ("\n"
-                  "Enter action:\n"
-                  "     1. List all open action items\n"
-                  "	    2. List all closed action items\n"
-                  "	    3. List all action items\n"
-                  "        		")
-        inp = int(raw_input(prompt))
-        if inp == 1:
-            actions.list_action_items(self, action_status='open')
-        elif inp == 2:
-            actions.list_action_items(self, action_status='closed')
-        elif inp == 3:
-            actions.list_action_items(self)
-        elif inp == 0:
-            self.show_main_menu()
-        else:
-            print 'Invalid option. Exiting now'
-            sys.exit(0)
-
-            # TODO: implement back on inp ==0
+        emp = emp_list[0]
+        while 1:
+            employee_options_next_operation = None
+            print (str(emp) + 'Home.\n'
+                              'Welcome !\n')
+            prompt = ("\n"
+                      "Enter action:\n"
+                      "     1. List all open action items\n"
+                      "	    2. List all closed action items\n"
+                      "	    3. List all action items\n"
+                      "        		")
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                choice = int(inp)
+                if choice == 1:
+                    employee_options_next_operation = actions.list_action_items(self, action_status='open')
+                elif choice == 2:
+                    employee_options_next_operation = actions.list_action_items(self, action_status='closed')
+                elif choice == 3:
+                    employee_options_next_operation = actions.list_action_items(self)
+                elif choice == 0:
+                    return 0
+                else:
+                    print('Invalid choice. Please try choosing from the options given.\n')
+            else:
+                print('Please enter the number shown in front of the choices.\n')
+            if employee_options_next_operation == 1:
+                return 1
+            elif employee_options_next_operation == 0:
+                continue
 
     def show_manager_login(self):
         # for testing action item add ; in ui show manager option to create service action item or feedback action item
@@ -100,27 +150,92 @@ class Cli:
         pass
 
     def show_main_menu(self):
-        prompt = \
-            """
-		Enter action:
-			1. Customer feedback
-			2. Employee login
-			3. Manager login
+        while 1:
+            main_menu_next_operation = None
+            prompt = ("\n"
+                      "Press # at any screen to exit\n"
+                      "Press 0 at any screen to go back\n"
+                      "Enter action:\n"
+                      "     1. Customer feedback\n"
+                      "	    2. Employee login\n"
+                      "	    3. Manager login\n"
+                      "	    #. Exit\n"
+                      "	    0. Exit\n"
+                      "> ")
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                choice = int(inp)
+                if choice == 1:
+                    main_menu_next_operation = self.show_customer_feedback_entry()
+                elif choice == 2:
+                    main_menu_next_operation = self.show_emp_login()
+                elif choice == 3:
+                    main_menu_next_operation = self.show_manager_login()
+                elif choice == 0:
+                    return 0
+                else:
+                    print('Invalid choice. Please try choosing from the options given.\n')
+            else:
+                print('Please enter the number shown in front of the choices.\n')
+            if main_menu_next_operation == 1:
+                return 1
+            elif main_menu_next_operation == 0:
+                continue
 
-		"""
-        inp = int(raw_input(prompt))  # TODO: handle invalid inp type
-        if inp == None:
-            print 'invalid input'
-        elif inp == 1:
-            self.show_customer_feedback_entry()
-        elif inp == 2:
-            self.show_emp_login()
-        elif inp == 3:
-            self.show_manager_login()
-        else:
-            print 'invalid input'
+
+
+def show_owner_login(self):
+    prompt = 'Enter employee ID: '
+    emp_id = int(raw_input(prompt))
+    db = Core.DB.DB()
+    empList = db.query('Employee', '{"id" : "' + str(emp_id) + '"}')
+    db.close()
+
+    # Error cases
+
+    if len(empList) > 1:
+        print ('Fatal Error: Duplicate Employee IDs present!!!!')
+        sys.exit(1)
+    elif len(empList) == 0:
+        print ('No employee with ID ' + str(emp_id))
+        print ('Try again')
+        self.show_emp_login()
+
+    # everything okay
+
+    emp = empList[0]
+    print (emp)
+    prompt = ("\n"
+              "Enter action:\n"
+              "     1. List all open action items\n"
+              "	    2. List all closed action items\n"
+              "	    3. List all action items\n"
+              "        		")
+    inp = int(raw_input(prompt))
+    if inp == 1:
+        actions.list_action_items(self, action_status='open')
+    elif inp == 2:
+        actions.list_action_items(self, action_status='closed')
+    elif inp == 3:
+        actions.list_action_items(self)
+    elif inp == 0:
+        self.show_main_menu()
+    else:
+        print ('Invalid option. Exiting now')
+        sys.exit(0)
+
+        # TODO: implement back on inp ==0
 
 
 if __name__ == '__main__':
-    cli = Cli()
-    cli.show_main_menu()
+    while 1:
+        cli = Cli()
+        next_operation = cli.show_main_menu()
+        if next_operation == 1:
+            break
+        elif next_operation == 0:
+            continue

@@ -3,7 +3,7 @@ import MySQLdb as mysql
 
 class DB:
     def __init__(self):
-        self.connection = mysql.connect(user="root", passwd="root", db="cmpe138_project_team3_feedback")
+        self.connection = mysql.connect(user="root", passwd="admin", db="cmpe138_project_team3_feedback")
 
     def close(self):
         """close connection"""
