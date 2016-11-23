@@ -1,9 +1,11 @@
 import Core.DB
+from abc import ABCMeta, abstractmethod
 
 
 class Entity(object):
-    """Abstract base class for all Entities"""
+    __metaclass__ = ABCMeta
 
+    @abstractmethod
     def persist(self):
         """for all variable in the (respective) class,
         it checks if not None and fires
