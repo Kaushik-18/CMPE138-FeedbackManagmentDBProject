@@ -126,8 +126,13 @@ def insert_service_feedback(self, customer_id):
         db.close()
 
 
-def list_action_items(self, action_status=None):
-    pass  # TODO
+def list_action_items(self, employee_id, action_status=None):
+    db = Core.DB.DB()
+    action_dict = {"assigned_to": employee_id}
+    if action_status is not None:
+        action_dict.update({"action_status": action_status})
+    items = db.query("action_items", action_dict)
+    return items
 
 
 def listAllFeedbacks(self):

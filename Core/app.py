@@ -5,7 +5,6 @@ from abc import ABCMeta, abstractmethod
 class Entity(object):
     __metaclass__ = ABCMeta
 
-    @abstractmethod
     def persist(self):
         """for all variable in the (respective) class,
         it checks if not None and fires
@@ -37,6 +36,9 @@ class Employee(Entity):
         self.name = name
         self.manager_id = manager_id
         self.franchise_id = franchise_id
+
+    def  printEmployee(self):
+        print self.name, "  manager id : ", self.manager_id, " franchise id : ", self.franchise_id
 
 
 class Franchise(Entity):
@@ -103,3 +105,23 @@ class ServiceFeedback(Feedback):
         db.insert_feedback_record("service",
                                   (self.rating, self.customer_id, self.item_id,
                                    self.comments, self.franchise_id))
+
+
+class ActionItems:
+    def __init__(self, action_item_id, start_date, end_date, action_status,assigned_to= None,
+                 created_by=None, comments=None, service_feedback_id=None, product_feedback_id=None):
+        self.assigned_to = assigned_to
+        self.action_item_id = action_item_id
+        self.start_date = start_date
+        self.end_date = end_date
+        self.service_feedback_id = service_feedback_id
+        self.product_feedback_id = product_feedback_id
+        self.comments = comments
+        self.created_by = created_by
+        self.action_status = action_status
+
+    def printItem(self):
+        print (
+            "ID : ", self.action_item_id, " comments : ", self.comments, "start date : ", self.start_date,
+            "end date : ",
+            self.end_date)

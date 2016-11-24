@@ -8,7 +8,7 @@ class DB(object):
     _queryString = "SELECT {attributes} FROM {table} {condition}"
 
     def __init__(self):
-        self.connection = mysql.connect(user="root", passwd="admin",
+        self.connection = mysql.connect(user="root", passwd="root",
                                         db="cmpe138_project_team3_feedback")
 
     def close(self):
@@ -19,16 +19,15 @@ class DB(object):
         """Will execute the query and return rows as a list of objects.
         Return empty list in case of No results"""
         queryString = self.formatQuerySting(table, paramsJson, attributes)
-        cursor = self.connection.cursor()
+        cursor = self.connection.cursor(mysql.cursors.DictCursor)
         cursor.execute(queryString)
         rows = cursor.fetchall()
         retval = []
         for row in rows:
-            retval += self._getObject(table=table, row)
-        self.close()
+            retval.append(self._getObject(table,row))
         return retval
 
-    def _getObject(self, table, *args):
+    def _getObject(self, table, args):
         # TODO use consistent attribute names and order across python classes
         # and SQL tables so that we can dynamically generate objects and
         # we don't need to write a dirty highly coupled if else ladder like
@@ -48,12 +47,16 @@ class DB(object):
                                    item_id=args[3], comments=args[4],
                                    franchise_id=args[5])
         elif table == 'employee':
-            return Employee(name=args[1] + " " + args[2], franchise_id=args[3],
-                            manager_id=args[4])
+            return Employee(name=args["f_name"]+args["l_name"], franchise_id=args["franchise_id"],
+                            manager_id=args["manager_id"])
         elif table == 'franchise':
             return Franchise(name=args[1], st_address=args[2], address=args[3],
                              city=args[4], state=args[5], zip=args[6],
                              manager_id=args[7])
+        elif table == "action_items":
+            return ActionItems(action_item_id=args["action_item_id"],action_status=args["action_status"],
+                               start_date=args["start_date"],end_date=args["end_date"],
+                               )
 
     @classmethod
     def formatQuerySting(clss, table, paramsJson, attributes):
