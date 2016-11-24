@@ -31,7 +31,7 @@ class DB(object):
     def _getObject(self, table, *args):
         # TODO use consistent attribute names and order across python classes
         # and SQL tables so that we can dynamically generate objects and
-        # we don't need to write a dirty hight coupled if else ladder like
+        # we don't need to write a dirty highly coupled if else ladder like
         # the one below :(
         if table == 'customer':
             return Customer(args[1] + " " + args[2])
