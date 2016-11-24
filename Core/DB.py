@@ -1,6 +1,8 @@
 import MySQLdb as mysql
 import re
 
+from app import *
+
 
 class DB(object):
     _queryString = "SELECT {attributes} FROM {table} {condition}"
@@ -19,9 +21,39 @@ class DB(object):
         queryString = self.formatQuerySting(table, paramsJson, attributes)
         cursor = self.connection.cursor()
         cursor.execute(queryString)
-        retval = None  # TODO get values
+        rows = cursor.fetchall()
+        retval = []
+        for row in rows:
+            retval += self._getObject(table=table, row)
         self.close()
         return retval
+
+    def _getObject(self, table, *args):
+        # TODO use consistent attribute names and order across python classes
+        # and SQL tables so that we can dynamically generate objects and
+        # we don't need to write a dirty hight coupled if else ladder like
+        # the one below :(
+        if table == 'customer':
+            return Customer(args[1] + " " + args[2])
+        elif table == 'product':
+            return Product(args[1])
+        elif table == 'service':
+            return Service(args[1])
+        elif table == 'service_feedback':
+            return ServiceFeedback(rating=args[1], comments=args[2],
+                                   customer_id=args[3], item_id=args[4],
+                                   franchise_id=args[5])
+        elif table == 'product_feedback':
+            return ProductFeedback(rating=args[1], customer_id=args[2],
+                                   item_id=args[3], comments=args[4],
+                                   franchise_id=args[5])
+        elif table == 'employee':
+            return Employee(name=args[1] + " " + args[2], franchise_id=args[3],
+                            manager_id=args[4])
+        elif table == 'franchise':
+            return Franchise(name=args[1], st_address=args[2], address=args[3],
+                             city=args[4], state=args[5], zip=args[6],
+                             manager_id=args[7])
 
     @classmethod
     def formatQuerySting(clss, table, paramsJson, attributes):
