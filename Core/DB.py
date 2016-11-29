@@ -161,7 +161,7 @@ class DB(object):
 
             cursor.execute(
                 "INSERT INTO action_items(start_date,end_date,created_by,"
-                "assigned_to,comments," + item_type +
+                "assigned_to,comments, " + item_type +
                 ")VALUES(%s,%s,%s,%s,%s,%s)", values)
             self.connection.commit()
         except mysql.Error:
@@ -179,3 +179,18 @@ class DB(object):
             print("Invalid ids entered")
         finally:
             self.close()
+
+    def insert_new_customer(self, values):
+        id = None
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                "INSERT INTO customer(f_name, l_name)"
+                " VALUES(%s,%s)", values)
+            id = cursor.lastrowid
+            self.connection.commit()
+        except mysql.Error:
+            print ("Invalid IDs entered")
+        finally:
+            self.close()
+        return id
