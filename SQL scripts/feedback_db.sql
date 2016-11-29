@@ -105,6 +105,14 @@ CREATE TABLE action_items
   FOREIGN KEY (assigned_to) REFERENCES employee (employee_id)
 );
 
+CREATE TABLE logins  -- different permissions for this table
+(
+  entity_type         VARCHAR(50),
+  id                  INT(15),
+  pass                VARCHAR(30),
+  PRIMARY KEY (entity_type, id)
+);
+
 ALTER TABLE cmpe138_project_team3_feedback.employee
   ADD CONSTRAINT
 FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id);

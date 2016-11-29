@@ -116,4 +116,14 @@ INSERT INTO employee  (employee.employee_id,employee.f_name,employee.l_name,empl
 (20030,"Mclaughlin","Storyman",5,20004);
 
 
+
+#logins
+INSERT INTO logins VALUES  -- duty of application to check if given ID actually exists in the given entiy_type table
+("employee", 20000, "mgrpass0"),
+("employee", 20001, "mgrpass1"),
+("employee", 20002, "mgrpass2"),
+("employee", 20003, "mgrpass3"),
+("employee", 20004, "mgrpass4"),
+("employee", 20005, "mgrpass5");
+
 SET FOREIGN_KEY_CHECKS=1;
