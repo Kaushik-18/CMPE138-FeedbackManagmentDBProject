@@ -1,7 +1,9 @@
 from __future__ import print_function
 
 import getpass
+# adding path of upper level modules.
 import sys
+sys.path.append('..')
 
 import Core.DB
 import Core.app
@@ -21,7 +23,7 @@ class Cli:
             if inp is None:
                 continue
             elif inp == '#':
-                return 1
+                return 1('../..')
             elif inp.isdigit():
                 customer_id = int(inp)
                 if customer_id == 0:
