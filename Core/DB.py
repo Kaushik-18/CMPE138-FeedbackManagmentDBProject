@@ -6,7 +6,7 @@ from app import *
 
 # TODO refactor: put below params in .properties file
 DB_USERNAME = 'root'
-DB_PASSWORD = '123'
+DB_PASSWORD = 'admin'
 DB_NAME = 'cmpe138_project_team3_feedback'
 
 
@@ -198,3 +198,21 @@ class DB(object):
             print("Invalid ids entered")
         finally:
             self.close()
+
+
+    def fetch_average_ratings(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT product_feedback.franchise_id, AVG(product_feedback.ratings), AVG(service_feedback.ratings) FROM product_feedback LEFT JOIN service_feedback ON product_feedback.franchise_id = service_feedback.franchise_id GROUP BY franchise_id UNION SELECT service_feedback.franchise_id, AVG(product_feedback.ratings), AVG(service_feedback.ratings) FROM product_feedback RIGHT JOIN service_feedback ON product_feedback.franchise_id = service_feedback.franchise_id GROUP BY franchise_id")
+        if cursor.rowcount > 0:
+            return cursor.fetchall()
+        else:
+            return []
+
+    def fetch_product_ratings(self):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "SELECT product_id, AVG(ratings) FROM product_feedback GROUP BY product_id")
+        if cursor.rowcount > 0:
+            return cursor.fetchall()
+        else:
+            return []

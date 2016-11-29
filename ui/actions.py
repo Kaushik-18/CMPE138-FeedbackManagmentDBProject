@@ -166,3 +166,18 @@ def insert_action_item(self):
 
 def close_action_item(self):
     pass  # TODO
+
+def show_average_rating_all_products(self):
+    db = Core.DB.DB()
+    results = db.fetch_average_ratings()
+    print('Franchise            Average Product Rating          Average Service Rating\n')
+    for result in results:
+        print('' + str(result[0]) + '                    ' + str(result[1]) + '                          ' + str(
+            result[2]) + '\n')
+
+def show_product_wise_rating(self):
+    db = Core.DB.DB()
+    results = db.fetch_product_ratings()
+    print('Product            Average Rating\n')
+    for result in results:
+        print('' + str(result[0]) + '                    ' + str(result[1]) + '\n')
