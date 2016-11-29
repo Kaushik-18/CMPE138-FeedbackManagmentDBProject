@@ -38,7 +38,7 @@ class Customer(Entity):
         self.name = name
         self.id = None
 
-    def printItem(self):
+    def print_item(self):
         print("Customer ID: ", self.id
               , "Customer Name: ", self.name)
 
@@ -50,7 +50,7 @@ class Employee(Entity):
         self.manager_id = manager_id
         self.franchise_id = franchise_id
 
-    def printEmployee(self):
+    def print_employee_entity(self):
         print self.name, "  manager id : ", self.manager_id, " franchise id : ", self.franchise_id
 
 
@@ -87,7 +87,7 @@ class Feedback(Entity):
         self.item_id = item_id
         self.franchise_id = franchise_id
 
-    def printItem(self):
+    def print_item(self):
         pass  # TODO
 
 
@@ -119,7 +119,7 @@ class ProductFeedback(Feedback):
         else:
             return False
 
-    def printItem(self):
+    def print_item(self):
         pass  # TODO
 
     def persist(self):
@@ -164,8 +164,8 @@ class ServiceFeedback(Feedback):
                                    self.comments, self.franchise_id))
 
 
-class ActionItems(Entity):
-    def __init__(self, action_item_id=None, start_date=None, end_date=None, action_status=None, assigned_to=None,
+class ActionItems:
+    def __init__(self, action_item_id, start_date, end_date, action_status, assigned_to=None,
                  created_by=None, comments=None, service_feedback_id=None, product_feedback_id=None):
         self.assigned_to = assigned_to
         self.action_item_id = action_item_id
@@ -183,7 +183,7 @@ class ActionItems(Entity):
         else:
             return False
 
-    def printItem(self):
+    def print_item(self):
         print (
             "ID : ", self.action_item_id, " comments : ", self.comments, "start date : ", self.start_date,
             "end date : ",

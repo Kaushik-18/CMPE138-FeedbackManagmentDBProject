@@ -1,6 +1,4 @@
-
-SET FOREIGN_KEY_CHECKS=0;
-
+SET FOREIGN_KEY_CHECKS =0;
 
 
 
@@ -20,12 +18,12 @@ INSERT INTO product_feedback (product_feedback_id,franchise_id,customer_id,produ
 #1,2,3,4,6
 
 #product
-INSERT INTO Product (product.product_id,product.product_name) VALUES (20000,"Tops"),(20001,"Jeans"),(20002,"Belts"),(20003,"Bags"),(20004,"bandanas"),(20005,"skirts"),(20006,"Kurtis"),(20007,"jewellery"),(20008,"jackets"),(20009,"hats");
+INSERT INTO product (product.product_id,product.product_name) VALUES (20000,"Tops"),(20001,"Jeans"),(20002,"Belts"),(20003,"Bags"),(20004,"bandanas"),(20005,"skirts"),(20006,"Kurtis"),(20007,"jewellery"),(20008,"jackets"),(20009,"hats");
 
 
 
 #service
-INSERT INTO Service (service.service_id,service.service_name) VALUES (1,"Billing Desk"),(2,"Sales Representative"),(3,"Security Personal"),(4,"Designer"),(5,"Cleaner"),(6,"Rack Helpers");
+INSERT INTO service (service.service_id,service.service_name) VALUES (1,"Billing Desk"),(2,"Sales Representative"),(3,"Security Personal"),(4,"Designer"),(5,"Cleaner"),(6,"Rack Helpers");
 
 #service feedback
 INSERT INTO service_feedback (service_feedback.service_feedback_id,service_feedback.franchise_id,service_feedback.customer_id,service_feedback.service_id,service_feedback.ratings,service_feedback.comments) VALUES 
@@ -57,7 +55,7 @@ INSERT INTO action_items (action_items.action_item_id,action_items.start_date,ac
 
 
 #sold by
-INSERT INTO sold_by (sold_by.product_id,sold_by.franchise_id) VALUES (20008,1),(20008,4),(20009,1),(20004,5),(20001,2),(20001,4),(20005,1),(20005,1),(20002,2),(20003,1);
+INSERT INTO sold_by (sold_by.product_id,sold_by.franchise_id) VALUES (20008,1),(20008,4),(20009,1),(20004,5),(20001,2),(20001,4),(20005,1),(20002,2),(20003,1);
 
 #service provided by
 INSERT INTO service_provided_by (service_provided_by.service_id,service_provided_by.employee_id) VALUES (4,20014),(6,20010),(1,20013),(6,20018),(3,20017),(4,20019),(5,20017),(6,20010),(4,20010),(1,20013);
@@ -70,8 +68,8 @@ INSERT INTO customer (customer.customer_id,customer.f_name,customer.l_name) VALU
 
 
 #franchise
-INSERT INTO Franchise
-(Franchise.name,franchise_id,Franchise.address,franchise.st_address,franchise.city,franchise.state,franchise.zip,Franchise.manager_id) VALUES 
+INSERT INTO franchise
+(franchise.name,franchise_id,franchise.address,franchise.st_address,franchise.city,franchise.state,franchise.zip,franchise.manager_id) VALUES 
 ("San Jose Downtown",1,"Ap #876","9811 Risus. Av.","San Jose","California","94555",20000),
 ("Sunnyvale Temple",2,"638","830 Lacinia. Av.","Sunnyvale","California","94734",20001),
 ("University Local",3,"173","661-4917 Nec, Rd.","Dallas","Texas","73301",20002),

@@ -6,8 +6,9 @@ from app import *
 
 # TODO refactor: put below params in .properties file
 DB_USERNAME = 'root'
-DB_PASSWORD = '123'
+DB_PASSWORD = 'root'
 DB_NAME = 'cmpe138_project_team3_feedback'
+
 
 class DB(object):
     _queryString = "SELECT {attributes} FROM {table} {condition}"
@@ -29,7 +30,7 @@ class DB(object):
         rows = cursor.fetchall()
         retval = []
         for row in rows:  # row is a a dict here
-            retval.append(self._getObject(table,row))
+            retval.append(self._getObject(table, row))
         return retval
 
     def _getObject(self, table, args):
@@ -78,7 +79,6 @@ class DB(object):
             logins = logins.from_dict(init_dict=row)
             logins.pswd = row['pass']
             return logins
-
 
     @classmethod
     def formatQuerySting(clss, table, paramsJson, attributes):
@@ -135,16 +135,54 @@ class DB(object):
     # TODO add query to check if product id is available for particular
     # franchise record
     def check_product_record(self, check_id, franchise_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from sold_by  where product_id =%s AND franchise_id =%s",
+                       (check_id, franchise_id))
+
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     def check_franchise_exists(self, franchise_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from franchise  where franchise_id =%s",
+                       (franchise_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     def check_service_exists(self, service_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from service where service_id =%s",
+                       (service_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
-    def check_feedback_id_action_exists(self, feedback_id, column_id):
-        return False
+    def check_feedback_id_action_exists(self, feedback_id, feedback_name):
+        cursor = self.connection.cursor()
+        if feedback_name == "service":
+            cursor.execute("SELECT * from service where service_feedback_id =%s", (feedback_id,))
+
+        cursor.execute("SELECT * from service where product_feedback_id =%s",
+                       (feedback_id,))
+
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
+
+    def check_customer_id(self, customer_id):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from customer  where customer_id =%s",
+                       (customer_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     # possible issue here ...we can add same feedback id in action item ...
     # 1 solution is to make feedback id columns unique and null,but some

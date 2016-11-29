@@ -1,7 +1,10 @@
 from __future__ import print_function
 
 import getpass
+# adding path of upper level modules.
 import sys
+
+sys.path.append('..')
 
 import Core.DB
 import Core.app
@@ -21,7 +24,7 @@ class Cli:
             if inp is None:
                 continue
             elif inp == '#':
-                return 1
+                return 1('../..')
             elif inp.isdigit():
                 customer_id = int(inp)
                 if customer_id == 0:
@@ -48,7 +51,7 @@ class Cli:
 
         # everything okay
         cust = custList[0]
-        cust.printItem()
+        cust.print_item()
         while 1:
             feedback_type_choice_next_operation = None
             prompt = ("\n"
@@ -125,7 +128,7 @@ class Cli:
         while 1:
             emp.printEmployee()
             print('Home.\n'
-                             'Welcome !\n')
+                  'Welcome !\n')
             prompt = ("\n"
                       "Enter action:\n"
                       "     1. List all open action items\n"
@@ -143,15 +146,15 @@ class Cli:
                     return 0
                 items = []
                 if choice == 1:
-                    items = actions.list_action_items(self, employee_id,action_status=0)
+                    items = actions.list_action_items(self, employee_id, action_status=0)
                 elif choice == 2:
-                    items = actions.list_action_items(self, employee_id,action_status=1)
+                    items = actions.list_action_items(self, employee_id, action_status=1)
                 elif choice == 3:
                     items = actions.list_action_items(self)
 
                 if len(items) > 0:
                     for item in items:
-                        print(item.printItem())
+                        print(item.print_item())
                 else:
                     print("No items available")
 
@@ -266,7 +269,7 @@ class Cli:
 
                     if len(items) > 0:
                         for item in items:
-                            print(item.printItem())
+                            print(item.print_item())
                     else:
                         print("No items available")
 
@@ -280,7 +283,6 @@ class Cli:
                         actions.close_action_item(self)
                         pass
                     break
-
 
     def show_main_menu(self):
         while 1:

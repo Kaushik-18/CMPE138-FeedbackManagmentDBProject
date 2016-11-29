@@ -87,7 +87,7 @@ def insert_service_feedback(self, customer_id):
         if db.check_franchise_exists(fb.franchise_id):
             item_id_input = None
             while 1:
-                item_id_input = raw_input("Enter product ID: ")
+                item_id_input = raw_input("Enter service ID: ")
                 if item_id_input.isdigit():
                     break
                 elif item_id_input == '#':
