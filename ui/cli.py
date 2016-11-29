@@ -19,7 +19,7 @@ class Cli:
         customer_id = None
         custList = None
         while 1:
-            prompt = ' Enter customer ID: '
+            prompt = ' Enter customer ID (or "new"): '
             inp = raw_input(prompt)
             if inp is None:
                 continue
@@ -44,6 +44,10 @@ class Cli:
                         continue
                     elif len(custList) == 1:  # success
                         break
+            elif inp == "new":
+                new_id = actions.signup()
+                print('Your customer ID is: ' + str(new_id))
+                continue
             else:
                 print('Customer ID is a numeric ID number given to each '
                       'customer.\n'

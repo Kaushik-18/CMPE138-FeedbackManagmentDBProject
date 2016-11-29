@@ -86,7 +86,8 @@ class DB(object):
         Return a SQL query string for selecting attributes
         """
         assert type(table) == str
-        assert type(paramsJson) == dict
+        if paramsJson is not None:
+            assert type(paramsJson) == dict
         assert type(attributes) == str
         assert re.match("\s*(\*|(\w+,?\s*)+)\s*", attributes)
 
@@ -217,3 +218,18 @@ class DB(object):
             print("Invalid ids entered")
         finally:
             self.close()
+
+    def insert_new_customer(self, values):
+        id = None
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                "INSERT INTO customer(f_name, l_name)"
+                " VALUES(%s,%s)", values)
+            id = cursor.lastrowid
+            self.connection.commit()
+        except mysql.Error:
+            print ("Invalid IDs entered")
+        finally:
+            self.close()
+        return id
