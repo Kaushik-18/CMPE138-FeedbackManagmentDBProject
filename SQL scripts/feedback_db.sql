@@ -88,7 +88,7 @@ CREATE TABLE service_provided_by
   FOREIGN KEY (employee_id) REFERENCES employee (employee_id)
 );
 
-CREATE TABLE action_items
+CREATE TABLE action_items  -- 0 is open in action_status
 (
   action_item_id      INT(15) PRIMARY KEY AUTO_INCREMENT,
   start_date          DATETIME NOT NULL,

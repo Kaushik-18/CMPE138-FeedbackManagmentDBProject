@@ -223,7 +223,26 @@ def insert_action_item(self):
 
 def close_action_item(self):
     db = Core.DB.DB()
-    action_items = db.query(table="action_items", paramsJson={})
+    action_items = db.query(table="action_items")
+    for action in action_items:
+        action.printItem()
+    print("---------------------")
+    action_item_id = raw_input("Select an action item from the above list: ")
+    action_status = None
+    while 1:
+        action_status_str = raw_input("Enter 'open' or 'close'")
+        if action_status_str == 'open':
+            action_status = 0
+            break
+        elif action_status_str == 'close':
+            action_status = 1
+            break
+        else:
+            print('"open" or "close" are the only two options \nTry again')
+            continue
+    values = (action_status, action_item_id)
+    db.update_action_item(values=values)
+
 
 
 def signup():

@@ -86,7 +86,8 @@ class DB(object):
         Return a SQL query string for selecting attributes
         """
         assert type(table) == str
-        assert type(paramsJson) == dict
+        if paramsJson is not None:
+            assert type(paramsJson) == dict
         assert type(attributes) == str
         assert re.match("\s*(\*|(\w+,?\s*)+)\s*", attributes)
 
