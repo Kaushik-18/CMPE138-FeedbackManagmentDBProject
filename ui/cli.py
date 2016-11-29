@@ -28,7 +28,7 @@ class Cli:
                     return 0
                 else:  # success case
                     db = Core.DB.DB()
-                    custList = db.query('customer', {"id": str(customer_id)})
+                    custList = db.query('customer', {"customer_id": str(customer_id)})
                     db.close()
                     # Error cases
                     if len(custList) > 1:
@@ -162,10 +162,11 @@ class Cli:
                       'options given.\n')
 
     def show_manager_login(self):
+        # TODO by mgr, franchise for all 7 options
         # for testing action item add ; in ui show manager option to create
         # service action item or feedback action item
-        db = Core.DB.DB()
-        db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
+        # db = Core.DB.DB()
+        # db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
 
         # @author Gurnoor
         # I did not understand what/ why is happening above in this function.
@@ -231,7 +232,7 @@ class Cli:
                       "     1. List all unassigned feedbacks\n"
                       "     2. List all feedbacks\n"
                       "     3. List all open action items\n"
-                      "     4. List all closed action items\n "
+                      "     4. List all closed action items\n"
                       "     5. List all action items\n"
                       "     6. Assign an action item\n"
                       "     7. Close an action item\n"
@@ -250,9 +251,8 @@ class Cli:
                 if choice not in (6, 7):
                     items = []
                     if choice == 1:
-                        items = actions.list_unassigned_feedbacks(self)
+                        items = actions.list_unassigned_feedbacks(self, emp.franchise_id)
                     elif choice == 2:
-                        pass
                         items = actions.list_all_feedbacks(self)
                     elif choice == 3:
                         items = actions.list_action_items(self, action_status=0)

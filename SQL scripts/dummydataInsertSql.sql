@@ -83,12 +83,12 @@ INSERT INTO Franchise
 INSERT INTO employee  (employee.employee_id,employee.f_name,employee.l_name,employee.franchise_id,employee.manager_id) VALUES 
 
 
-(20000,"Madhur","Khandelwal",1,20005),
-(20001,"Keyur","Golani",2,20005),
-(20002,"Kaushik","Shingane",3,20005),
-(20003,"Gurnoor","Singh",4,20005),
-(20004,"Suraj","Khurana",5,20005),
-(20005,"Kong","Li",5,20005),
+(20000,"Madhur","Khandelwal",1,null),
+(20001,"Keyur","Golani",2,null),
+(20002,"Kaushik","Shingane",3,null),
+(20003,"Gurnoor","Singh",4,null),
+(20004,"Suraj","Khurana",5,null),
+(20005,"Kong","Li",5,null),
 (20006,"Jerome","Carr",1,20000),
 (20007,"Dawn","Hopper",1,20000),
 (20008,"Christian","Haley",1,20000),
