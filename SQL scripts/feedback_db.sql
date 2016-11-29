@@ -76,7 +76,8 @@ CREATE TABLE sold_by
   product_id   INT(15) NOT NULL,
   franchise_id INT(15) NOT NULL,
   FOREIGN KEY (product_id) REFERENCES product (product_id),
-  FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id)
+  FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id),
+  primary key (product_id,franchise_id)
 );
 
 CREATE TABLE service_provided_by

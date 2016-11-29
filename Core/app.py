@@ -39,7 +39,7 @@ class Employee(Entity):
         self.manager_id = manager_id
         self.franchise_id = franchise_id
 
-    def  printEmployee(self):
+    def print_employee_entity(self):
         print self.name, "  manager id : ", self.manager_id, " franchise id : ", self.franchise_id
 
 
@@ -110,7 +110,7 @@ class ServiceFeedback(Feedback):
 
 
 class ActionItems:
-    def __init__(self, action_item_id, start_date, end_date, action_status,assigned_to= None,
+    def __init__(self, action_item_id, start_date, end_date, action_status, assigned_to=None,
                  created_by=None, comments=None, service_feedback_id=None, product_feedback_id=None):
         self.assigned_to = assigned_to
         self.action_item_id = action_item_id
@@ -122,7 +122,7 @@ class ActionItems:
         self.created_by = created_by
         self.action_status = action_status
 
-    def printItem(self):
+    def print_item(self):
         print (
             "ID : ", self.action_item_id, " comments : ", self.comments, "start date : ", self.start_date,
             "end date : ",

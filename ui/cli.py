@@ -125,7 +125,7 @@ class Cli:
         while 1:
             emp.printEmployee()
             print('Home.\n'
-                             'Welcome !\n')
+                  'Welcome !\n')
             prompt = ("\n"
                       "Enter action:\n"
                       "     1. List all open action items\n"
@@ -143,9 +143,9 @@ class Cli:
                     return 0
                 items = []
                 if choice == 1:
-                    items = actions.list_action_items(self, employee_id,action_status=0)
+                    items = actions.list_action_items(self, employee_id, action_status=0)
                 elif choice == 2:
-                    items = actions.list_action_items(self, employee_id,action_status=1)
+                    items = actions.list_action_items(self, employee_id, action_status=1)
                 elif choice == 3:
                     items = actions.list_action_items(self)
 
@@ -280,7 +280,6 @@ class Cli:
                         actions.close_action_item(self)
                         pass
                     break
-
 
     def show_main_menu(self):
         while 1:
