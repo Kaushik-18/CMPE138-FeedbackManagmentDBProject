@@ -1,15 +1,21 @@
-import MySQLdb as mysql
 import re
 
+import MySQLdb as mysql
+
 from app import *
+
+# TODO refactor: put below params in .properties file
+DB_USERNAME = 'root'
+DB_PASSWORD = '123'
+DB_NAME = 'cmpe138_project_team3_feedback'
 
 
 class DB(object):
     _queryString = "SELECT {attributes} FROM {table} {condition}"
 
     def __init__(self):
-        self.connection = mysql.connect(user="root", passwd="root",
-                                        db="cmpe138_project_team3_feedback")
+        self.connection = mysql.connect(user=DB_USERNAME, passwd=DB_PASSWORD,
+                                        db=DB_NAME)
 
     def close(self):
         """close connection"""
@@ -24,7 +30,7 @@ class DB(object):
         rows = cursor.fetchall()
         retval = []
         for row in rows:
-            retval.append(self._getObject(table,row))
+            retval.append(self._getObject(table, row))
         return retval
 
     def _getObject(self, table, args):
@@ -47,15 +53,15 @@ class DB(object):
                                    item_id=args[3], comments=args[4],
                                    franchise_id=args[5])
         elif table == 'employee':
-            return Employee(name=args["f_name"]+args["l_name"], franchise_id=args["franchise_id"],
+            return Employee(name=args["f_name"] + args["l_name"], franchise_id=args["franchise_id"],
                             manager_id=args["manager_id"])
         elif table == 'franchise':
             return Franchise(name=args[1], st_address=args[2], address=args[3],
                              city=args[4], state=args[5], zip=args[6],
                              manager_id=args[7])
         elif table == "action_items":
-            return ActionItems(action_item_id=args["action_item_id"],action_status=args["action_status"],
-                               start_date=args["start_date"],end_date=args["end_date"],
+            return ActionItems(action_item_id=args["action_item_id"], action_status=args["action_status"],
+                               start_date=args["start_date"], end_date=args["end_date"],
                                )
 
     @classmethod
@@ -72,7 +78,12 @@ class DB(object):
             condition = "WHERE "
             flag = False
             for key in paramsJson:
-                temp = "%s = %s" % (key, paramsJson[key])
+                temp = None
+                # handle 'X is null query'
+                if (paramsJson[key] is None) or (paramsJson[key] == ""):
+                    temp = "%s is null" % (key)
+                else:
+                    temp = "%s = %s" % (key, paramsJson[key])
                 if flag:
                     condition += " AND " + temp
                 else:
@@ -105,16 +116,54 @@ class DB(object):
     # TODO add query to check if product id is available for particular
     # franchise record
     def check_product_record(self, check_id, franchise_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from sold_by  where product_id =%s AND franchise_id =%s",
+                       (check_id, franchise_id))
+
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     def check_franchise_exists(self, franchise_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from franchise  where franchise_id =%s",
+                       (franchise_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     def check_service_exists(self, service_id):
-        return True
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from service where service_id =%s",
+                       (service_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
-    def check_feedback_id_action_exists(self, feedback_id, column_id):
-        return False
+    def check_feedback_id_action_exists(self, feedback_id, feedback_name):
+        cursor = self.connection.cursor()
+        if feedback_name == "service":
+            cursor.execute("SELECT * from service where service_feedback_id =%s", (feedback_id,))
+
+        cursor.execute("SELECT * from service where product_feedback_id =%s",
+                       (feedback_id,))
+
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
+
+    def check_customer_id(self, customer_id):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * from customer  where customer_id =%s",
+                       (customer_id,))
+        if cursor.rowcount == 1:
+            return True
+        else:
+            return False
 
     # possible issue here ...we can add same feedback id in action item ...
     # 1 solution is to make feedback id columns unique and null,but some

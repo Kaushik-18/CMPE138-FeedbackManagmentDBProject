@@ -1,6 +1,4 @@
-
-SET FOREIGN_KEY_CHECKS=0;
-
+SET FOREIGN_KEY_CHECKS =0;
 
 
 
@@ -57,7 +55,7 @@ INSERT INTO action_items (action_items.action_item_id,action_items.start_date,ac
 
 
 #sold by
-INSERT INTO sold_by (sold_by.product_id,sold_by.franchise_id) VALUES (20008,1),(20008,4),(20009,1),(20004,5),(20001,2),(20001,4),(20005,1),(20005,1),(20002,2),(20003,1);
+INSERT INTO sold_by (sold_by.product_id,sold_by.franchise_id) VALUES (20008,1),(20008,4),(20009,1),(20004,5),(20001,2),(20001,4),(20005,1),(20002,2),(20003,1);
 
 #service provided by
 INSERT INTO service_provided_by (service_provided_by.service_id,service_provided_by.employee_id) VALUES (4,20014),(6,20010),(1,20013),(6,20018),(3,20017),(4,20019),(5,20017),(6,20010),(4,20010),(1,20013);
@@ -115,5 +113,15 @@ INSERT INTO employee  (employee.employee_id,employee.f_name,employee.l_name,empl
 (20029,"Shin","Lucre",5,20004),
 (20030,"Mclaughlin","Storyman",5,20004);
 
+
+
+#logins
+INSERT INTO logins VALUES  -- duty of application to check if given ID actually exists in the given entiy_type table
+("employee", 20000, "mgrpass0"),
+("employee", 20001, "mgrpass1"),
+("employee", 20002, "mgrpass2"),
+("employee", 20003, "mgrpass3"),
+("employee", 20004, "mgrpass4"),
+("employee", 20005, "mgrpass5");
 
 SET FOREIGN_KEY_CHECKS=1;

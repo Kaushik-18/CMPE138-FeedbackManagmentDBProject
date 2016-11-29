@@ -1,55 +1,56 @@
 from __future__ import print_function
+
+import getpass
+# adding path of upper level modules.
 import sys
+sys.path.append('..')
 
 import Core.DB
 import Core.app
 import actions
+import utils
 
 
 # TODO: define the methods for db access and printing in separate class,
 # keep only flow related code in cli.py
-
 class Cli:
     def show_customer_feedback_entry(self):
         customer_id = None
+        custList = None
         while 1:
             prompt = ' Enter customer ID: '
             inp = raw_input(prompt)
             if inp is None:
                 continue
             elif inp == '#':
-                return 1
+                return 1('../..')
             elif inp.isdigit():
                 customer_id = int(inp)
                 if customer_id == 0:
                     return 0
-                else:
-                    break
+                else:  # success case
+                    db = Core.DB.DB()
+                    custList = db.query('customer', {"id": str(customer_id)})
+                    db.close()
+                    # Error cases
+                    if len(custList) > 1:
+                        print('Internal Error. Please contact administrator\n')
+                        print('Fatal Error: Duplicate Customer IDs present!!!!')
+                        sys.exit(1)
+                    elif len(custList) == 0:
+                        print('No customer with ID ' + str(customer_id))
+                        print('\nTry again')
+                        continue
+                    elif len(custList) == 1:  # success
+                        break
             else:
                 print('Customer ID is a numeric ID number given to each '
                       'customer.\n'
                       'Please try again.\n')
 
-                # db = Core.DB.DB()
-                # custList = db.query('Customer', '{"id" : "' + str(cust_id)
-                #                     + '"}')
-                # db.close()
-                #
-                # # Error cases
-                #
-                # if len(custList) > 1:
-                #     print 'Fatal Error: Duplicate Customer IDs present!!!!'
-                #     sys.exit(1)
-                # elif len(custList) == 0:
-                #     print 'No customer with ID ' + str(cust_id)
-                #     print 'Try again'
-                #     self.customerFeedback()
-                #
-                # # everything okay
-                #
-                # cust = custList[0]
-                # print cust
-
+        # everything okay
+        cust = custList[0]
+        cust.printItem()
         while 1:
             feedback_type_choice_next_operation = None
             prompt = ("\n"
@@ -126,7 +127,7 @@ class Cli:
         while 1:
             emp.printEmployee()
             print('Home.\n'
-                             'Welcome !\n')
+                  'Welcome !\n')
             prompt = ("\n"
                       "Enter action:\n"
                       "     1. List all open action items\n"
@@ -144,9 +145,9 @@ class Cli:
                     return 0
                 items = []
                 if choice == 1:
-                    items = actions.list_action_items(self, employee_id,action_status=0)
+                    items = actions.list_action_items(self, employee_id, action_status=0)
                 elif choice == 2:
-                    items = actions.list_action_items(self, employee_id,action_status=1)
+                    items = actions.list_action_items(self, employee_id, action_status=1)
                 elif choice == 3:
                     items = actions.list_action_items(self)
 
@@ -167,7 +168,120 @@ class Cli:
         # service action item or feedback action item
         db = Core.DB.DB()
         db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
-        pass
+
+        # @author Gurnoor
+        # I did not understand what/ why is happening above in this function.
+
+        manager_id = None
+        mgr_list = None
+        while 1:
+            prompt = 'Enter manager ID: '
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                manager_id = int(inp)
+                if manager_id == 0:
+                    return 0
+                else:
+                    db = Core.DB.DB()
+                    mgr_list = db.query(
+                        'employee', {"employee_id": str(manager_id),
+                                     "manager_id": ""})
+                    db.close()
+
+                    if len(mgr_list) > 1:
+                        print('Internal Error. Please try contacting '
+                              'the administrator.')
+                        return 1
+                    elif len(mgr_list) == 0:
+                        print('No manager with ID ' + str(manager_id) + '\n'
+                                                                        'Try again')
+                        continue
+                    else:
+                        break
+            else:
+                print('Manager ID is a numeric ID number given to '
+                      'each manager.\n'
+                      'Please try again.\n')
+
+        tries = 3
+        while 1:
+            prompt = 'Enter password: '
+            pswd = getpass.getpass(prompt)
+            if utils.checkPass('employee', manager_id, pswd) == False:
+                tries -= 1
+                if tries != 0:
+                    print("Incorrect password. Try again\n"
+                          + str(tries) + " tries left")
+                else:
+                    print("Maximum tries exceeded. Exiting now...")
+                    return 0
+
+            else:
+                break  # everything okay, proceed further
+
+        emp = mgr_list[0]
+        while 1:
+            emp.printEmployee()
+            print('Home.\n'
+                  'Welcome !\n')
+            prompt = ("\n"
+                      "Enter action:\n"
+                      "     1. List all unassigned feedbacks\n"
+                      "     2. List all feedbacks\n"
+                      "     3. List all open action items\n"
+                      "     4. List all closed action items\n "
+                      "     5. List all action items\n"
+                      "     6. Assign an action item\n"
+                      "     7. Close an action item\n"
+                      "     #. Exit\n"
+                      "     0. Back\n"
+                      "     >      ")
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                choice = int(inp)
+                if choice == 0:
+                    return 0
+                if choice not in (6, 7):
+                    items = []
+                    if choice == 1:
+                        items = actions.list_unassigned_feedbacks(self)
+                    elif choice == 2:
+                        pass
+                        items = actions.list_all_feedbacks(self)
+                    elif choice == 3:
+                        items = actions.list_action_items(self, action_status=0)
+                    elif choice == 4:
+                        items = actions.list_action_items(self, action_status=1)
+                    elif choice == 5:
+                        items = actions.list_action_items(self)
+                    else:
+                        print('Invalid choice. Please try choosing from the '
+                              'options given.\n')
+
+                    if len(items) > 0:
+                        for item in items:
+                            print(item.printItem())
+                    else:
+                        print("No items available")
+
+                    break
+                else:  # choice in (6, 7)
+                    if choice == 6:
+                        # Assign an action item
+                        actions.insert_action_item(self)
+                        pass
+                    elif choice == 7:
+                        actions.close_action_item(self)
+                        pass
+                    break
 
     def show_main_menu(self):
         while 1:

@@ -76,7 +76,8 @@ CREATE TABLE sold_by
   product_id   INT(15) NOT NULL,
   franchise_id INT(15) NOT NULL,
   FOREIGN KEY (product_id) REFERENCES product (product_id),
-  FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id)
+  FOREIGN KEY (franchise_id) REFERENCES franchise (franchise_id),
+  primary key (product_id,franchise_id)
 );
 
 CREATE TABLE service_provided_by
@@ -103,6 +104,14 @@ CREATE TABLE action_items
   FOREIGN KEY (product_feedback_id) REFERENCES product_feedback (product_feedback_id),
   FOREIGN KEY (created_by) REFERENCES employee (employee_id),
   FOREIGN KEY (assigned_to) REFERENCES employee (employee_id)
+);
+
+CREATE TABLE logins  -- different permissions for this table
+(
+  entity_type         VARCHAR(50),
+  id                  INT(15),
+  pass                VARCHAR(30),
+  PRIMARY KEY (entity_type, id)
 );
 
 ALTER TABLE cmpe138_project_team3_feedback.employee
