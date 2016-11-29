@@ -126,25 +126,43 @@ def insert_service_feedback(self, customer_id):
         db.close()
 
 
-def list_action_items(self, employee_id, action_status=None):
+def list_action_items(self, employee_id=None, action_status=None):
     db = Core.DB.DB()
-    action_dict = {"assigned_to": employee_id}
-    if action_status is not None:
-        action_dict.update({"action_status": action_status})
-    items = db.query("action_items", action_dict)
-    return items
-
-
-def listAllFeedbacks(self):
-    db = Core.DB.DB()
-    results = db.query(self, "Feedback")
-    db.close()
-    if (results is None) and (len(results) == 0):
-        print("No Results")
+    if employee_id is not None:
+        action_dict = {"assigned_to": employee_id}
+        if action_status is not None:
+            action_dict.update({"action_status": action_status})
+        items = db.query("action_items", action_dict)
+        return items
     else:
-        for result in results:
-            print(result)
+        items = db.query("action_items")
+        return items
+
+
+def list_all_feedbacks(self):
+    db = Core.DB.DB()
+    feedback_types = ("product_feedback", "service_feedback")
+    for feedback_type in feedback_types:
+        results = db.query(self, feedback_type)  # TODO: yield results instead of below stuff
+        db.close()
+        if (results is None) and (len(results) == 0):
+            print("No Results")
+        else:
+            for result in results:
+                print(result.printItem())
+
+
+def list_unassigned_feedbacks(self):
+    pass  # TODO fire SQL query directly
 
 
 def update_action_item():
     pass
+
+
+def insert_action_item(self):
+    pass  # TODO
+
+
+def close_action_item(self):
+    pass  # TODO
