@@ -1,15 +1,20 @@
-import MySQLdb as mysql
 import re
+
+import MySQLdb as mysql
 
 from app import *
 
+# TODO refactor: put below params in .properties file
+DB_USERNAME = 'root'
+DB_PASSWORD = '123'
+DB_NAME = 'cmpe138_project_team3_feedback'
 
 class DB(object):
     _queryString = "SELECT {attributes} FROM {table} {condition}"
 
     def __init__(self):
-        self.connection = mysql.connect(user="root", passwd="root",
-                                        db="cmpe138_project_team3_feedback")
+        self.connection = mysql.connect(user=DB_USERNAME, passwd=DB_PASSWORD,
+                                        db=DB_NAME)
 
     def close(self):
         """close connection"""
@@ -72,7 +77,12 @@ class DB(object):
             condition = "WHERE "
             flag = False
             for key in paramsJson:
-                temp = "%s = %s" % (key, paramsJson[key])
+                temp = None
+                # handle 'X is null query'
+                if (paramsJson[key] is None) or (paramsJson[key] == ""):
+                    temp = "%s is null" % (key)
+                else:
+                    temp = "%s = %s" % (key, paramsJson[key])
                 if flag:
                     condition += " AND " + temp
                 else:

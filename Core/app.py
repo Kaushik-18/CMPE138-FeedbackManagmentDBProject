@@ -1,5 +1,6 @@
+from abc import ABCMeta
+
 import Core.DB
-from abc import ABCMeta, abstractmethod
 
 
 class Entity(object):
@@ -26,8 +27,9 @@ class Customer(Entity):
         self.name = name
         self.id = None
 
-    def __repr__(self):
-        pass
+    def printItem(self):
+        print("Customer ID: ", self.id
+              , "Customer Name: ", self.name)
 
 
 class Employee(Entity):
@@ -81,8 +83,8 @@ class ProductFeedback(Feedback):
         super(ProductFeedback, self).__init__(rating, comments, customer_id,
                                               item_id, franchise_id)
 
-    def __str__(self):
-        pass
+    def printItem(self):
+        pass  # TODO
 
     def persist(self):
         db = Core.DB.DB()
@@ -97,8 +99,8 @@ class ServiceFeedback(Feedback):
         super(ServiceFeedback, self).__init__(rating, comments, customer_id,
                                               item_id, franchise_id)
 
-    def __str__(self):
-        pass
+    def printItem(self):
+        pass  # TODO
 
     def persist(self):
         db = Core.DB.DB()
