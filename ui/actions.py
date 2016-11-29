@@ -205,7 +205,18 @@ def update_action_item():
 
 
 def insert_action_item(self):
-
+    start_date = input("Enter start date: ")
+    end_date = input("Enter end date: ")
+    created_by = input("Enter created by: ")
+    assigned_to = input("Enter the ID of assigned employee: ")
+    comm = raw_input("Enter comments: ")
+    fb_type = raw_input("Enter feedback type (product or service): ")
+    fb_id = input("Enter feedback id: ")
+    db = Core.DB.DB()
+    values = (start_date, end_date, created_by, assigned_to,
+              comm, fb_id)
+    db.insert_action_item(values=values,
+                          feedback_type=fb_type)
 
 # TODO use DB.py
 

@@ -161,7 +161,7 @@ class DB(object):
 
             cursor.execute(
                 "INSERT INTO action_items(start_date,end_date,created_by,"
-                "assigned_to,comments," + item_type +
+                "assigned_to,comments, " + item_type +
                 ")VALUES(%s,%s,%s,%s,%s,%s)", values)
             self.connection.commit()
         except mysql.Error:
