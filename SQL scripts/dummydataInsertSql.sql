@@ -126,3 +126,12 @@ INSERT INTO logins VALUES  -- duty of application to check if given ID actually 
 ("employee", 20005, "mgrpass5");
 
 SET FOREIGN_KEY_CHECKS=1;
+
+INSERT INTO service_feedback (service_feedback.service_feedback_id,service_feedback.franchise_id,service_feedback.customer_id,service_feedback.service_id,service_feedback.ratings,service_feedback.comments) 
+VALUES (14,4,10001,3,3,"long queues and slow cashiers");
+
+INSERT INTO action_items (action_items.start_date,action_items.end_date,action_items.action_status,action_items.created_by,action_items.assigned_to,action_items.comments,action_items.product_feedback_id,action_items.service_feedback_id)
+VALUES ("2015-12-13", "2016-01-20",1, 20001, 20013, "Improve rating till next quarter", 1, NULL );
+
+INSERT INTO action_items (action_items.start_date,action_items.end_date,action_items.action_status,action_items.created_by,action_items.assigned_to,action_items.comments,action_items.product_feedback_id,action_items.service_feedback_id)
+VALUES ("2014-12-13", "2015-01-15",0, 20001, 20013, "Improve rating till next year", 1, NULL );
