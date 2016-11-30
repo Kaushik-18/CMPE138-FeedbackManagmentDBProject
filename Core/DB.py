@@ -41,10 +41,13 @@ class DB(object):
         """close connection"""
         self.connection.close()
 
-    def _execute(self, cursor, queryString):
+    def _execute(self, cursor, queryString, values=None):
         self.logger.debug("Executing query '%s'" % queryString)
         try:
-            retval = cursor.execute(queryString)
+            if values:
+                retval = cursor.execute(queryString, values)
+            else:
+                retval = cursor.execute(queryString)
             if getattr(cursor, 'rowcount', None):
                 logging.debug("Returned %s rows" % cursor.rowcount)
             return retval
