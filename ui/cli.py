@@ -278,11 +278,11 @@ class Cli:
                 else:  # choice in (6, 7)
                     if choice == 6:
                         # Assign an action item
-                        actions.insert_action_item(self)
-                        pass
+                        actions.insert_action_item(self,
+                                                   manager_id=emp.id,
+                                                   franchise_id=emp.franchise_id)
                     elif choice == 7:
-                        actions.close_action_item(self)
-                        pass
+                        actions.close_action_item(self, manager_id=emp.id)
                     continue
 
 
