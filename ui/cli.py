@@ -3,6 +3,7 @@ from __future__ import print_function
 import getpass
 # adding path of upper level modules.
 import sys
+
 sys.path.append('..')
 
 import Core.DB
@@ -18,7 +19,7 @@ class Cli:
         customer_id = None
         custList = None
         while 1:
-            prompt = ' Enter customer ID: '
+            prompt = ' Enter customer ID (or "new"): '
             inp = raw_input(prompt)
             if inp is None:
                 continue
@@ -30,7 +31,7 @@ class Cli:
                     return 0
                 else:  # success case
                     db = Core.DB.DB()
-                    custList = db.query('customer', {"id": str(customer_id)})
+                    custList = db.query('customer', {"customer_id": str(customer_id)})
                     db.close()
                     # Error cases
                     if len(custList) > 1:
@@ -43,6 +44,10 @@ class Cli:
                         continue
                     elif len(custList) == 1:  # success
                         break
+            elif inp == "new":
+                new_id = actions.signup()
+                print('Your customer ID is: ' + str(new_id))
+                continue
             else:
                 print('Customer ID is a numeric ID number given to each '
                       'customer.\n'
@@ -50,7 +55,7 @@ class Cli:
 
         # everything okay
         cust = custList[0]
-        cust.printItem()
+        cust.print_item()
         while 1:
             feedback_type_choice_next_operation = None
             prompt = ("\n"
@@ -125,7 +130,7 @@ class Cli:
         emp = emp_list[0]
 
         while 1:
-            emp.printEmployee()
+            emp.print_employee_entity()
             print('Home.\n'
                   'Welcome !\n')
             prompt = ("\n"
@@ -153,7 +158,7 @@ class Cli:
 
                 if len(items) > 0:
                     for item in items:
-                        print(item.printItem())
+                        print(item.print_item())
                 else:
                     print("No items available")
 
@@ -164,10 +169,11 @@ class Cli:
                       'options given.\n')
 
     def show_manager_login(self):
+        # TODO by mgr, franchise for all 7 options
         # for testing action item add ; in ui show manager option to create
         # service action item or feedback action item
-        db = Core.DB.DB()
-        db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
+        # db = Core.DB.DB()
+        # db.insert_action_item(("2016-06-2", "2016-06-3", 4, 1, "finish", 1), "product")
 
         # @author Gurnoor
         # I did not understand what/ why is happening above in this function.
@@ -225,7 +231,7 @@ class Cli:
 
         emp = mgr_list[0]
         while 1:
-            emp.printEmployee()
+            emp.print_employee_entity()
             print('Home.\n'
                   'Welcome !\n')
             prompt = ("\n"
@@ -233,7 +239,7 @@ class Cli:
                       "     1. List all unassigned feedbacks\n"
                       "     2. List all feedbacks\n"
                       "     3. List all open action items\n"
-                      "     4. List all closed action items\n "
+                      "     4. List all closed action items\n"
                       "     5. List all action items\n"
                       "     6. Assign an action item\n"
                       "     7. Close an action item\n"
@@ -252,12 +258,11 @@ class Cli:
                 if choice not in (6, 7):
                     items = []
                     if choice == 1:
-                        items = actions.list_unassigned_feedbacks(self)
+                        items = actions.list_unassigned_feedbacks(self, emp.franchise_id)
                     elif choice == 2:
-                        pass
-                        items = actions.list_all_feedbacks(self)
+                        items = actions.list_all_feedbacks(self, emp.franchise_id)
                     elif choice == 3:
-                        items = actions.list_action_items(self, action_status=0)
+                        items = actions.list_action_items(self, action_status=0, )
                     elif choice == 4:
                         items = actions.list_action_items(self, action_status=1)
                     elif choice == 5:
@@ -268,20 +273,21 @@ class Cli:
 
                     if len(items) > 0:
                         for item in items:
-                            print(item.printItem())
+                            print(item.print_item())
                     else:
                         print("No items available")
 
-                    break
+                    continue
                 else:  # choice in (6, 7)
                     if choice == 6:
                         # Assign an action item
-                        actions.insert_action_item(self)
-                        pass
+                        actions.insert_action_item(self,
+                                                   manager_id=emp.id,
+                                                   franchise_id=emp.franchise_id)
                     elif choice == 7:
-                        actions.close_action_item(self)
-                        pass
-                    break
+                        actions.close_action_item(self, manager_id=emp.id)
+                    continue
+
 
     def show_main_menu(self):
         while 1:

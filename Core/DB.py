@@ -6,7 +6,7 @@ from app import *
 
 # TODO refactor: put below params in .properties file
 DB_USERNAME = 'root'
-DB_PASSWORD = 'makmakmak'
+DB_PASSWORD = 'root'
 DB_NAME = 'cmpe138_project_team3_feedback'
 
 
@@ -58,10 +58,11 @@ class DB(object):
         Return empty list in case of No results"""
         queryString = self.formatQuerySting(table, paramsJson, attributes)
         cursor = self.connection.cursor(mysql.cursors.DictCursor)
-        self._execute(cursor, queryString)
+        cursor.execute(queryString)
+
         rows = cursor.fetchall()
         retval = []
-        for row in rows:
+        for row in rows:  # row is a a dict here
             retval.append(self._getObject(table, row))
         return retval
 
@@ -70,34 +71,49 @@ class DB(object):
         # and SQL tables so that we can dynamically generate objects and
         # we don't need to write a dirty highly coupled if else ladder like
         # the one below :(
+        row = args
         if table == 'customer':
-            return Customer(args[1] + " " + args[2])
+            cust = Customer(name=args['f_name'] + " " + args['l_name'])
+            cust.id = args['customer_id']
+            return cust
         elif table == 'product':
-            return Product(args[1])
+            prod = Product(name=args['product_name'])
+            prod.id = args['product_id']
+            return prod
         elif table == 'service':
-            return Service(args[1])
+            serv = Service(name=args['service_name'])
+            serv.id = args['service_id']
+            return serv
         elif table == 'service_feedback':
-            return ServiceFeedback(rating=args[1], comments=args[2],
-                                   customer_id=args[3], item_id=args[4],
-                                   franchise_id=args[5])
+            service_feedback = ServiceFeedback()
+            return service_feedback.from_dict(row)
         elif table == 'product_feedback':
-            return ProductFeedback(rating=args[1], customer_id=args[2],
-                                   item_id=args[3], comments=args[4],
-                                   franchise_id=args[5])
+            product_feedback = ProductFeedback()
+            return product_feedback.from_dict(row)
         elif table == 'employee':
-            return Employee(name=args["f_name"] + args["l_name"],
-                            franchise_id=args["franchise_id"],
-                            manager_id=args["manager_id"])
+            emp = Employee(name=args["f_name"] + args["l_name"], franchise_id=args["franchise_id"],
+                           manager_id=args["manager_id"])
+            emp.id = args["employee_id"]
+            return emp
         elif table == 'franchise':
-            return Franchise(name=args[1], st_address=args[2], address=args[3],
-                             city=args[4], state=args[5], zip=args[6],
-                             manager_id=args[7])
+            fran = Franchise()
+            fran = fran.from_dict(init_dict=row)
+            return fran
+            # return Franchise(name=args['name'], st_address=args[2], address=args[3],
+            #                 city=args[4], state=args[5], zip=args[6],
+            #                manager_id=args[7])
         elif table == "action_items":
-            return ActionItems(action_item_id=args["action_item_id"],
-                               action_status=args["action_status"],
-                               start_date=args["start_date"],
-                               end_date=args["end_date"],
-                               )
+            action = ActionItems()
+            action = action.from_dict(init_dict=row)
+            return action
+            # return ActionItems(action_item_id=args["action_item_id"], action_status=args["action_status"],
+            #                   start_date=args["start_date"], end_date=args["end_date"],
+            #                   )
+        elif table == "Logins":
+            logins = Logins()
+            logins = logins.from_dict(init_dict=row)
+            logins.pswd = row['pass']
+            return logins
 
     @classmethod
     def formatQuerySting(clss, table, paramsJson, attributes):
@@ -105,7 +121,8 @@ class DB(object):
         Return a SQL query string for selecting attributes
         """
         assert type(table) == str
-        assert type(paramsJson) == dict
+        if paramsJson is not None:
+            assert type(paramsJson) == dict
         assert type(attributes) == str
         assert re.match("\s*(\*|(\w+,?\s*)+)\s*", attributes)
 
@@ -118,7 +135,10 @@ class DB(object):
                 if (paramsJson[key] is None) or (paramsJson[key] == ""):
                     temp = "%s is null" % (key)
                 else:
-                    temp = "%s = %s" % (key, paramsJson[key])
+                    if type(paramsJson[key]) is str:
+                        temp = '%s = "%s"' % (key, paramsJson[key])
+                    else:
+                        temp = "%s = %s" % (key, paramsJson[key])
                 if flag:
                     condition += " AND " + temp
                 else:
@@ -211,7 +231,7 @@ class DB(object):
     #   suggest this is actually a bug in MySql
     # 2 solution is to check if feedback id is already entered using above
     #   function
-    def insert_action_item(self, values, feedback_type):
+    def insert_action_item(self, values, feedback_type, manager_id):
         try:
             cursor = self.connection.cursor()
             if feedback_type == "product":
@@ -241,3 +261,61 @@ class DB(object):
             print("Invalid ids entered")
         finally:
             self.close()
+
+    def insert_new_customer(self, values):
+        id = None
+        try:
+            cursor = self.connection.cursor()
+            cursor.execute(
+                "INSERT INTO customer(f_name, l_name)"
+                " VALUES(%s,%s)", values)
+            id = cursor.lastrowid
+            self.connection.commit()
+        except mysql.Error:
+            print ("Invalid IDs entered")
+        finally:
+            self.close()
+        return id
+
+    def fetch_average_ratings(self):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT product_feedback.franchise_id, AVG(product_feedback.ratings), AVG(service_feedback.ratings) FROM product_feedback LEFT JOIN service_feedback ON product_feedback.franchise_id = service_feedback.franchise_id GROUP BY franchise_id UNION SELECT service_feedback.franchise_id, AVG(product_feedback.ratings), AVG(service_feedback.ratings) FROM product_feedback RIGHT JOIN service_feedback ON product_feedback.franchise_id = service_feedback.franchise_id GROUP BY franchise_id")
+        if cursor.rowcount > 0:
+            return cursor.fetchall()
+        else:
+            return []
+
+    def fetch_product_ratings(self):
+        cursor = self.connection.cursor()
+        cursor.execute(
+            "SELECT product_id, AVG(ratings) FROM product_feedback GROUP BY product_id")
+        if cursor.rowcount > 0:
+            return cursor.fetchall()
+        else:
+            return []
+
+    def select_unassgn_fb(self, type, franchise_id):
+        table = None
+        column = None
+        franchise_id = str(franchise_id)
+        if type == 'product':
+            table = 'product_feedback'
+            column = 'product_feedback_id'
+        elif type == 'service':
+            table = 'service_feedback'
+            column = 'service_feedback_id'
+        query = "SELECT * FROM " + table + \
+                " WHERE franchise_id = " + franchise_id + \
+                " AND " + table + "." + column + " not in (" + \
+                " SELECT action_items." + column + " FROM action_items" \
+                                                   " WHERE action_items." + column + " is not null)"
+
+        retval = []
+        cursor = self.connection.cursor()
+        cursor = self.connection.cursor(mysql.cursors.DictCursor)
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            retval.append(self._getObject(table, row))
+
+        return retval

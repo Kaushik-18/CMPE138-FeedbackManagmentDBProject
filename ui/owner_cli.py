@@ -1,45 +1,67 @@
+import sys
+sys.path.append('..')
 import Core
 import actions
-import sys
 
 
-def show_owner_login(self):
-    prompt = 'Enter employee ID: '
-    emp_id = int(raw_input(prompt))
-    db = Core.DB.DB()
-    empList = db.query('Employee', '{"id" : "' + str(emp_id) + '"}')
-    db.close()
+class owner_cli:
+    def show_owner_login(self):
+        while 1:
+            prompt_username = 'Enter owner username: '
+            inp_username = raw_input(prompt_username)
+            if inp_username == '1':
+                prompt_paswsword = 'Enter your password: '
+                inp_password = raw_input(prompt_paswsword)
+                if inp_password == '1':
+                    break
+                else:
+                    print('Invalid password. Please try again!')
+            else:
+                print('Invalid username. Please try again!')
 
-    # Error cases
-    if len(empList) > 1:
-        print('Fatal Error: Duplicate Employee IDs present!!!!')
-        sys.exit(1)
-    elif len(empList) == 0:
-        print('No employee with ID ' + str(emp_id))
-        print('Try again')
-        self.show_emp_login()
+        while 1:
+            main_menu_next_operation = None
+            prompt = ("\n"
+                      "Press # at any screen to exit\n"
+                      "Press 0 at any screen to go back\n"
+                      "Enter action:\n"
+                      "     1. Average Ratings\n"
+                      "     2. Product wise Average Rating\n"
+                      "     #. Exit\n"
+                      "     0. Exit\n"
+                      "> ")
+            inp = raw_input(prompt)
+            if inp is None:
+                continue
+            elif inp == '#':
+                return 1
+            elif inp.isdigit():
+                choice = int(inp)
+                if choice == 1:
+                    main_menu_next_operation = actions.show_average_rating_all_products(self)
+                elif choice == 2:
+                    main_menu_next_operation = actions.show_product_wise_rating(self)
+                elif choice == 0:
+                    return 0
+                else:
+                    print(
+                        'Invalid choice. Please try choosing from the options '
+                        'given.\n')
+            else:
+                print('Please enter the number shown in front of the'
+                      ' choices.\n')
+            if main_menu_next_operation == 1:
+                return 1
+            elif main_menu_next_operation == 0:
+                continue
 
-    # everything okay
-
-    emp = empList[0]
-    prompt = ("\n"
-              "Enter action:\n"
-              "     1. List all open action items\n"
-              "     2. List all closed action items\n"
-              "     3. List all action items\n"
-              "     >       ")
-    inp = int(raw_input(prompt))
-    if inp == 1:
-        actions.list_action_items(self, action_status='open')
-    elif inp == 2:
-        actions.list_action_items(self, action_status='closed')
-    elif inp == 3:
-        actions.list_action_items(self)
-    elif inp == 0:
-        self.show_main_menu()
-    else:
-        print('Invalid option. Exiting now')
 
 
-
-show_owner_login()
+if __name__ == '__main__':
+    while 1:
+        cli = owner_cli()
+        next_operation = cli.show_owner_login()
+        if next_operation == 1:
+            break
+        elif next_operation == 0:
+            continue

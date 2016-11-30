@@ -36,7 +36,8 @@ INSERT INTO service_feedback (service_feedback.service_feedback_id,service_feedb
 (7,4,10001,5,1,"I could smell a dead rat somewhere"),
 (8,4,10007,2,1,"There is too long a wait at the billing counter. And then i have spent extra time, writing this review"),
 (9,3,10007,5,5,"My baby puked, but the cleaner cleant the stop promptly. A word of appreciation to him from myside"),
-(10,2,10007,2,3,"Too long a queue for a clothing store :( ");
+(10,2,10007,2,3,"Too long a queue for a clothing store :( "),
+(11,4,10001,3,3,"long queues and slow cashiers");
 
 
 #action item
@@ -81,12 +82,12 @@ INSERT INTO franchise
 INSERT INTO employee  (employee.employee_id,employee.f_name,employee.l_name,employee.franchise_id,employee.manager_id) VALUES 
 
 
-(20000,"Madhur","Khandelwal",1,20005),
-(20001,"Keyur","Golani",2,20005),
-(20002,"Kaushik","Shingane",3,20005),
-(20003,"Gurnoor","Singh",4,20005),
-(20004,"Suraj","Khurana",5,20005),
-(20005,"Kong","Li",5,20005),
+(20000,"Madhur","Khandelwal",1,null),
+(20001,"Keyur","Golani",2,null),
+(20002,"Kaushik","Shingane",3,null),
+(20003,"Gurnoor","Singh",4,null),
+(20004,"Suraj","Khurana",5,null),
+(20005,"Kong","Li",5,null),
 (20006,"Jerome","Carr",1,20000),
 (20007,"Dawn","Hopper",1,20000),
 (20008,"Christian","Haley",1,20000),
