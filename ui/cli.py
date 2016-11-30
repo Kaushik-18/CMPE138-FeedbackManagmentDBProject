@@ -317,7 +317,7 @@ class Cli:
                 elif choice == 3:
                     main_menu_next_operation = self.show_manager_login()
                 elif choice == 0:
-                    return 0
+                    return 1
                 else:
                     print(
                         'Invalid choice. Please try choosing from the options '
