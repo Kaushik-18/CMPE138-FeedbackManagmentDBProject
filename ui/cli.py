@@ -24,7 +24,7 @@ class Cli:
             if inp is None:
                 continue
             elif inp == '#':
-                return 1('../..')
+                return 1
             elif inp.isdigit():
                 customer_id = int(inp)
                 if customer_id == 0:
