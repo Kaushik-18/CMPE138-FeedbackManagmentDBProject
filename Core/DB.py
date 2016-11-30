@@ -1,12 +1,12 @@
 import re
-
+import logging
 import MySQLdb as mysql
 
 from app import *
 
 # TODO refactor: put below params in .properties file
 DB_USERNAME = 'root'
-DB_PASSWORD = '123'
+DB_PASSWORD = 'makmakmak'
 DB_NAME = 'cmpe138_project_team3_feedback'
 
 
@@ -46,7 +46,7 @@ class DB(object):
         try:
             retval = cursor.execute(queryString)
             if getattr(cursor, 'rowcount', None):
-                logging.debug("Returned %s rows" % retval.rowcount)
+                logging.debug("Returned %s rows" % cursor.rowcount)
             return retval
         except:
             logging.exception("Caught execption while executing query, '%s'" %
