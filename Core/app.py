@@ -43,8 +43,7 @@ class Customer(Entity):
         self.id = None
 
     def print_item(self):
-        print("Customer ID: ", self.id
-              , "Customer Name: ", self.name)
+        print "\nWelcome %s!" % self.name
 
 
 class Employee(Entity):
