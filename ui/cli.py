@@ -12,6 +12,7 @@ import actions
 import utils
 import logging
 
+
 # TODO: define the methods for db access and printing in separate class,
 # keep only flow related code in cli.py
 class Cli:
@@ -154,7 +155,7 @@ class Cli:
                 elif choice == 2:
                     items = actions.list_action_items(self, employee_id, action_status=1)
                 elif choice == 3:
-                    items = actions.list_action_items(self)
+                    items = actions.list_action_items(self, employee_id)
 
                 if len(items) > 0:
                     for item in items:
@@ -283,12 +284,11 @@ class Cli:
                     if choice == 6:
                         # Assign an action item
                         actions.insert_action_item(
-                                                   manager_id=emp.id,
-                                                   franchise_id=emp.franchise_id)
+                            manager_id=emp.id,
+                            franchise_id=emp.franchise_id)
                     elif choice == 7:
                         actions.close_action_item(manager_id=emp.id)
                     continue
-
 
     def show_main_menu(self):
         while 1:
@@ -372,6 +372,7 @@ def show_owner_login(self):
 
         # TODO: implement back on inp ==0
 
+
 def setupLogging():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -389,6 +390,7 @@ def setupLogging():
 
     logger.addHandler(fh)
     logger.addHandler(ch)
+
 
 if __name__ == '__main__':
     setupLogging()

@@ -1,0 +1,12 @@
+2016-11-29 20:17:14,382 -    DB -   DEBUG - Executing query 'INSERT INTO action_items(start_date,end_date,created_by,assigned_to,comments,product_feedback_id)VALUES(%s,%s,%s,%s,%s,%s)'
+2016-11-29 20:17:14,383 -  root -   ERROR - Caught execption while executing query, 'INSERT INTO action_items(start_date,end_date,created_by,assigned_to,comments,product_feedback_id)VALUES(%s,%s,%s,%s,%s,%s)'
+Traceback (most recent call last):
+  File "../Core/DB.py", line 48, in _execute
+    retval = cursor.execute(queryString, values)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/cursors.py", line 226, in execute
+    self.errorhandler(self, exc, value)
+  File "/usr/lib/python2.7/dist-packages/MySQLdb/connections.py", line 36, in defaulterrorhandler
+    raise errorvalue
+OperationalError: (1292, "Incorrect datetime value: '16-04-2016' for column 'start_date' at row 1")
+2016-11-29 20:20:46,381 -    DB -   DEBUG - Executing query 'UPDATE action_items set action_status=%s where action_item_id=%s'
+2016-11-29 20:20:46,394 -  root -   DEBUG - Returned 1 rows
