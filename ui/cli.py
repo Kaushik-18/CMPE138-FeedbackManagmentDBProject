@@ -257,9 +257,9 @@ class Cli:
                     if choice == 1:
                         items = actions.list_unassigned_feedbacks(self, emp.franchise_id)
                     elif choice == 2:
-                        items = actions.list_all_feedbacks(self)
+                        items = actions.list_all_feedbacks(self, emp.franchise_id)
                     elif choice == 3:
-                        items = actions.list_action_items(self, action_status=0)
+                        items = actions.list_action_items(self, action_status=0, )
                     elif choice == 4:
                         items = actions.list_action_items(self, action_status=1)
                     elif choice == 5:
@@ -274,7 +274,7 @@ class Cli:
                     else:
                         print("No items available")
 
-                    break
+                    continue
                 else:  # choice in (6, 7)
                     if choice == 6:
                         # Assign an action item
@@ -283,7 +283,8 @@ class Cli:
                     elif choice == 7:
                         actions.close_action_item(self)
                         pass
-                    break
+                    continue
+
 
 
     def show_main_menu(self):

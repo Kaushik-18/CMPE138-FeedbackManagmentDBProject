@@ -1,6 +1,5 @@
 import Core.DB
 import Core.app
-import ui.utils
 
 
 def insert_product_feedback(self, customer_id):
@@ -140,70 +139,35 @@ def list_action_items(self, employee_id=None, action_status=None):
         return items
 
 
-def list_all_feedbacks(self):
+def list_all_feedbacks(self, franchise_id=None):
     db = Core.DB.DB()
-    feedback_types = ("product_feedback", "service_feedback")
+    feedback_types = ["product_feedback", "service_feedback"]
     results = []
     for feedback_type in feedback_types:
-        results_part = db.query(self, feedback_type)
-        db.close()
+        if franchise_id is not None:
+            results_part = db.query(table=feedback_type, paramsJson={"franchise_id": int(franchise_id)})
+        else:
+            results_part = db.query(table=feedback_type)
+
         if (results_part is None) or (len(results_part) == 0):
             continue
         else:
             for result in results_part:
                 results.append(result)
+    db.close()
     return results
 
 
 def list_unassigned_feedbacks(self, franchise_id):
-    # TODO: test: test object set difference separately
-    # TODO: optimize: fire direct sql query
     db = Core.DB.DB()
-    all_prod_feedback_id_objs = db.query(table='product_feedback',
-                                         paramsJson={"franchise_id": franchise_id, },
-                                         attributes='product_feedback_id')
-    all_prod_feedback_ids = ui.utils.prodfbs_to_set(all_prod_feedback_id_objs)
+    unassigned_prod_feedbacks = db.select_unassgn_fb('product', franchise_id=franchise_id)
+    unassigned_serv_feedbacks = db.select_unassgn_fb('service', franchise_id=franchise_id)
 
-    assigned_prod_feedback_id_objs = db.query(table='action_items',
-                                              paramsJson={"service_feedback_id": ""},
-                                              attributes='product_feedback_id')
-    assigned_prod_feedback_ids = ui.utils.prodfbs_to_set(assigned_prod_feedback_id_objs)
-
-    unassigned_prod_feedback_ids = all_prod_feedback_ids.difference(assigned_prod_feedback_ids)
-
-    unassigned_prod_feedbacks = []
-    for uid in unassigned_prod_feedback_ids:
-        unassigned_prod_feedbacks.extend(db.query(table='product_feedback',
-                                                  paramsJson={"product_feedback_id": uid}))
-
-    # for service feedbacks
-    all_serv_feedback_id_objs = db.query(table='service_feedback',
-                                         paramsJson={"franchise_id": franchise_id, },
-                                         attributes='service_feedback_id')
-    all_serv_feedback_ids = ui.utils.servfbs_to_set(all_serv_feedback_id_objs)
-
-    assigned_serv_feedback_id_objs = db.query(table='action_items',
-                                              paramsJson={"product_feedback_id": ""},
-                                              attributes='service_feedback_id')
-    assigned_serv_feedback_ids = ui.utils.servfbs_to_set(assigned_serv_feedback_id_objs)
-
-    unassigned_serv_feedback_ids = all_serv_feedback_ids.difference(assigned_serv_feedback_ids)
-
-    unassigned_serv_feedbacks = []
-    for uid in unassigned_serv_feedback_ids:
-        unassigned_serv_feedbacks.extend(db.query(table='product_feedback',
-                                                  paramsJson={"product_feedback_id": uid}))
     unassigned_prod_feedbacks.extend(unassigned_serv_feedbacks)
     return unassigned_prod_feedbacks
 
 
-def update_action_item():
-    pass  # use DB.py
-
-
 # TODO by mgr, franchise
-
-
 def insert_action_item(self):
     start_date = input("Enter start date: ")
     end_date = input("Enter end date: ")
@@ -217,8 +181,6 @@ def insert_action_item(self):
               comm, fb_id)
     db.insert_action_item(values=values,
                           feedback_type=fb_type)
-
-# TODO use DB.py
 
 
 def close_action_item(self):
@@ -242,8 +204,6 @@ def close_action_item(self):
             continue
     values = (action_status, action_item_id)
     db.update_action_item(values=values)
-
-
 
 def signup():
     f_name = raw_input("Enter first name: ")
