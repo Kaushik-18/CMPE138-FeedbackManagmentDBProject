@@ -379,7 +379,7 @@ def setupLogging():
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
-    fh = logging.FileHandler('temp.txt')
+    fh = logging.FileHandler('rootLogger.log')
     fh.setLevel(logging.DEBUG)
 
     ch = logging.StreamHandler()
