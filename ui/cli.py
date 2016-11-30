@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import getpass
-# adding path of upper level modules.
 import sys
 
 sys.path.append('..')
@@ -264,11 +263,14 @@ class Cli:
                     elif choice == 2:
                         items = actions.list_all_feedbacks(self, emp.franchise_id)
                     elif choice == 3:
-                        items = actions.list_action_items(self, action_status=0, )
+                        items = actions.list_fran_action_items(self, action_status=0,
+                                                               manager_id=emp.id)
                     elif choice == 4:
-                        items = actions.list_action_items(self, action_status=1)
+                        items = actions.list_fran_action_items(self, action_status=1,
+                                                               manager_id=emp.id)
                     elif choice == 5:
-                        items = actions.list_action_items(self)
+                        items = actions.list_fran_action_items(self,
+                                                               manager_id=emp.id)
                     else:
                         print('Invalid choice. Please try choosing from the '
                               'options given.\n')

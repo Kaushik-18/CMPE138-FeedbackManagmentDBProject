@@ -139,6 +139,20 @@ def list_action_items(self, employee_id=None, action_status=None):
         return items
 
 
+def list_fran_action_items(self, action_status=None, manager_id=None):
+    db = Core.DB.DB()
+    actions = None
+    if action_status is None:
+        actions = db.query(table='action_items',
+                           paramsJson={"created_by": manager_id})
+    else:
+        actions = db.query(table='action_items',
+                           paramsJson={"created_by": manager_id,
+                                       "action_status": action_status})
+    return actions
+
+
+
 def list_all_feedbacks(self, franchise_id=None):
     db = Core.DB.DB()
     feedback_types = ["product_feedback", "service_feedback"]
