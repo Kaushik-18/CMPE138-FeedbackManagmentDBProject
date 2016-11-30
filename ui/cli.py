@@ -10,7 +10,7 @@ import Core.DB
 import Core.app
 import actions
 import utils
-
+import logging
 
 # TODO: define the methods for db access and printing in separate class,
 # keep only flow related code in cli.py
@@ -371,8 +371,26 @@ def show_owner_login(self):
 
         # TODO: implement back on inp ==0
 
+def setupLogging():
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    fh = logging.FileHandler('temp.txt')
+    fh.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.INFO)
+
+    formatter = logging.Formatter('%(asctime)s - %(name)5s - '
+                                  '%(levelname)7s - %(message)s')
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+
+    logger.addHandler(fh)
+    logger.addHandler(ch)
 
 if __name__ == '__main__':
+    setupLogging()
     while 1:
         cli = Cli()
         next_operation = cli.show_main_menu()

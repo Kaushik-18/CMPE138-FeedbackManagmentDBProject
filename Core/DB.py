@@ -1,5 +1,5 @@
 import re
-
+import logging
 import MySQLdb as mysql
 
 from app import *
@@ -16,10 +16,42 @@ class DB(object):
     def __init__(self):
         self.connection = mysql.connect(user=DB_USERNAME, passwd=DB_PASSWORD,
                                         db=DB_NAME)
+        self.logFile = 'DB.log'
+        self._setupLogging()
+
+    def _setupLogging(self):
+        self.logger = logging.getLogger('DB')
+        self.logger.setLevel(logging.DEBUG)
+
+        fh = logging.FileHandler(self.logFile)
+        fh.setLevel(logging.DEBUG)
+
+        # ch = logging.StreamHandler()
+        # ch.setLevel(logging.INFO)
+
+        formatter = logging.Formatter('%(asctime)s - %(name)5s - '
+                                      '%(levelname)7s - %(message)s')
+        fh.setFormatter(formatter)
+        # ch.setFormatter(formatter)
+
+        self.logger.addHandler(fh)
+        # self.logger.addHandler(ch)
 
     def close(self):
         """close connection"""
         self.connection.close()
+
+    def _execute(self, cursor, queryString):
+        self.logger.debug("Executing query '%s'" % queryString)
+        try:
+            retval = cursor.execute(queryString)
+            if getattr(cursor, 'rowcount', None):
+                logging.debug("Returned %s rows" % cursor.rowcount)
+            return retval
+        except:
+            logging.exception("Caught execption while executing query, '%s'" %
+                              queryString)
+            raise
 
     def query(self, table, paramsJson=None, attributes="*"):
         """Will execute the query and return rows as a list of objects.
@@ -129,15 +161,17 @@ class DB(object):
     def insert_feedback_record(self, tablename, values):
         cursor = self.connection.cursor()
         if tablename == "product":
-            cursor.execute(
-                "INSERT INTO product_feedback(ratings,customer_id,"
-                "product_id,comments,franchise_id)VALUES (%s,%s,%s,%s,%s)",
-                values)
+            self._execute(cursor,
+                          "INSERT INTO product_feedback(ratings,customer_id,"
+                          "product_id,comments,franchise_id)VALUES "
+                          "(%s,%s,%s,%s,%s)",
+                          values)
         else:
-            cursor.execute(
-                "INSERT INTO service_feedback(ratings,customer_id,service_id,"
-                "comments,franchise_id)VALUES (%s,%s,%s,%s,%s)",
-                values)
+            self._execute(cursor,
+                          "INSERT INTO service_feedback(ratings,customer_id,"
+                          "service_id,"
+                          "comments,franchise_id)VALUES (%s,%s,%s,%s,%s)",
+                          values)
         self.connection.commit()
         self.close()
 
@@ -148,8 +182,9 @@ class DB(object):
     # franchise record
     def check_product_record(self, check_id, franchise_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * from sold_by  where product_id =%s AND franchise_id =%s",
-                       (check_id, franchise_id))
+        self._execute(cursor, "SELECT * from sold_by  where product_id =%s AND"
+                      " franchise_id =%s",
+                      (check_id, franchise_id))
 
         if cursor.rowcount == 1:
             return True
@@ -158,8 +193,9 @@ class DB(object):
 
     def check_franchise_exists(self, franchise_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * from franchise  where franchise_id =%s",
-                       (franchise_id,))
+        self._execute(cursor, "SELECT * from franchise  where "
+                      "franchise_id =%s",
+                      (franchise_id,))
         if cursor.rowcount == 1:
             return True
         else:
@@ -167,8 +203,8 @@ class DB(object):
 
     def check_service_exists(self, service_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * from service where service_id =%s",
-                       (service_id,))
+        self._execute(cursor, "SELECT * from service where service_id =%s",
+                      (service_id,))
         if cursor.rowcount == 1:
             return True
         else:
@@ -177,10 +213,12 @@ class DB(object):
     def check_feedback_id_action_exists(self, feedback_id, feedback_name):
         cursor = self.connection.cursor()
         if feedback_name == "service":
-            cursor.execute("SELECT * from service where service_feedback_id =%s", (feedback_id,))
+            self._execute(cursor, "SELECT * from service where "
+                          "service_feedback_id =%s", (feedback_id,))
 
-        cursor.execute("SELECT * from service where product_feedback_id =%s",
-                       (feedback_id,))
+        self._execute(cursor, "SELECT * from service where "
+                      "product_feedback_id =%s",
+                      (feedback_id,))
 
         if cursor.rowcount == 1:
             return True
@@ -189,8 +227,8 @@ class DB(object):
 
     def check_customer_id(self, customer_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * from customer  where customer_id =%s",
-                       (customer_id,))
+        self._execute(cursor, "SELECT * from customer  where customer_id =%s",
+                      (customer_id,))
         if cursor.rowcount == 1:
             return True
         else:
@@ -209,10 +247,11 @@ class DB(object):
             else:
                 item_type = "service_feedback_id"
 
-            cursor.execute(
-                "INSERT INTO action_items(start_date,end_date,created_by,"
-                "assigned_to,comments, " + item_type +
-                ")VALUES(%s,%s,%s,%s,%s,%s)", values)
+            self._execute(cursor,
+                          "INSERT INTO "
+                          "action_items(start_date,end_date,created_by,"
+                          "assigned_to,comments," + item_type +
+                          ")VALUES(%s,%s,%s,%s,%s,%s)", values)
             self.connection.commit()
         except mysql.Error:
             print("Invalid ids entered")
@@ -222,8 +261,9 @@ class DB(object):
     def update_action_item(self, values):
         try:
             cursor = self.connection.cursor()
-            cursor.execute("UPDATE action_items set action_status=%s where "
-                           "action_item_id=%s", values)
+            self._execute(cursor,
+                          "UPDATE action_items set action_status=%s where "
+                          "action_item_id=%s", values)
             self.connection.commit()
         except mysql.Error:
             print("Invalid ids entered")
