@@ -230,10 +230,11 @@ class Cli:
                 break  # everything okay, proceed further
 
         emp = mgr_list[0]
+        emp.print_employee_entity()
+        print('Home.\n'
+              'Welcome !\n')
         while 1:
-            emp.print_employee_entity()
-            print('Home.\n'
-                  'Welcome !\n')
+
             prompt = ("\n"
                       "Enter action:\n"
                       "     1. List all unassigned feedbacks\n"
@@ -281,11 +282,11 @@ class Cli:
                 else:  # choice in (6, 7)
                     if choice == 6:
                         # Assign an action item
-                        actions.insert_action_item(self,
+                        actions.insert_action_item(
                                                    manager_id=emp.id,
                                                    franchise_id=emp.franchise_id)
                     elif choice == 7:
-                        actions.close_action_item(self, manager_id=emp.id)
+                        actions.close_action_item(manager_id=emp.id)
                     continue
 
 

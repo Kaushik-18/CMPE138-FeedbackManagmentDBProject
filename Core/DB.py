@@ -242,7 +242,7 @@ class DB(object):
     #   suggest this is actually a bug in MySql
     # 2 solution is to check if feedback id is already entered using above
     #   function
-    def insert_action_item(self, values, feedback_type, manager_id):
+    def insert_action_item(self, values, feedback_type):
         try:
             cursor = self.connection.cursor()
             if feedback_type == "product":

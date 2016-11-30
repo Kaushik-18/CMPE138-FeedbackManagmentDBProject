@@ -33,7 +33,7 @@ class Entity(object):
             setattr(self, key, init_dict[key])
         return self
 
-    def printItem(self):
+    def print_item(self):
         pprint.pprint(self.__dict__)
 
 
@@ -91,8 +91,6 @@ class Feedback(Entity):
         self.item_id = item_id
         self.franchise_id = franchise_id
 
-    def print_item(self):
-        pass  # TODO
 
 class ProductFeedback(Feedback):
     def __init__(self, rating=0, comments="", customer_id=0, item_id=0,
@@ -123,7 +121,7 @@ class ProductFeedback(Feedback):
             return False
 
     def print_item(self):
-        pass  # TODO
+        print "product feedback id : ", self.product_feedback_id, " rating : ", self.rating, "comments ", self.comments, "product id ", self.item_id
 
     def persist(self):
         db = Core.DB.DB()
@@ -138,6 +136,9 @@ class ServiceFeedback(Feedback):
         self.service_feedback_id = None
         super(ServiceFeedback, self).__init__(rating, comments, customer_id,
                                               item_id, franchise_id)
+
+    def print_item(self):
+        print "service feedback id : ", self.service_feedback_id, " rating : ", self.rating, "comments ", self.comments, "service id ", self.item_id
 
     def from_dict(self, init_dict):
         if 'service_feedback_id' in init_dict:

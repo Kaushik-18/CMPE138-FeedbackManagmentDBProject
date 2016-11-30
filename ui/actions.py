@@ -167,7 +167,7 @@ def list_unassigned_feedbacks(self, franchise_id):
     return unassigned_prod_feedbacks
 
 
-def insert_action_item(self, manager_id, franchise_id):
+def insert_action_item(manager_id, franchise_id):
     """Assign an action item"""
     db = Core.DB.DB()
 
@@ -196,11 +196,11 @@ def insert_action_item(self, manager_id, franchise_id):
                           feedback_type=fb_type)
 
 
-def close_action_item(self, manager_id):
+def close_action_item(manager_id):
     db = Core.DB.DB()
     action_items = db.query(table="action_items")
     for action in action_items:
-        action.printItem()
+        action.print_item()
     print("---------------------")
 
     # check if s/he is closing the action created by himself
@@ -233,6 +233,7 @@ def close_action_item(self, manager_id):
     values = (action_status, action_item_id)
     db.update_action_item(values=values)
 
+
 def signup():
     f_name = raw_input("Enter first name: ")
     l_name = raw_input("Enter last name: ")
@@ -241,6 +242,7 @@ def signup():
     return db.insert_new_customer(values=values)
     pass  # TODO
 
+
 def show_average_rating_all_products(self):
     db = Core.DB.DB()
     results = db.fetch_average_ratings()
@@ -248,6 +250,7 @@ def show_average_rating_all_products(self):
     for result in results:
         print('' + str(result[0]) + '                    ' + str(result[1]) + '                          ' + str(
             result[2]) + '\n')
+
 
 def show_product_wise_rating(self):
     db = Core.DB.DB()

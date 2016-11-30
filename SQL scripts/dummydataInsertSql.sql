@@ -87,7 +87,7 @@ INSERT INTO employee  (employee.employee_id,employee.f_name,employee.l_name,empl
 (20002,"Kaushik","Shingane",3,null),
 (20003,"Gurnoor","Singh",4,null),
 (20004,"Suraj","Khurana",5,null),
-(20005,"Kong","Li",5,null),
+(20005,"jackie","coo",1,2000),
 (20006,"Jerome","Carr",1,20000),
 (20007,"Dawn","Hopper",1,20000),
 (20008,"Christian","Haley",1,20000),
