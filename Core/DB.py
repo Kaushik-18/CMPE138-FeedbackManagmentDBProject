@@ -82,6 +82,14 @@ class DB(object):
             logins = logins.from_dict(init_dict=row)
             logins.pswd = row['pass']
             return logins
+        elif table == "sold_by":
+            sold_by = SoldBy()
+            sold_by = sold_by.from_dict(init_dict=row)
+            return sold_by
+        elif table == "service_provided_by":
+            serv_pr = ServiceProvidedBy()
+            serv_pr = serv_pr.from_dict(init_dict=row)
+            return serv_pr
 
     @classmethod
     def formatQuerySting(clss, table, paramsJson, attributes):

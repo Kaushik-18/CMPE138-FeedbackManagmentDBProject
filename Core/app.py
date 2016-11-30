@@ -201,3 +201,15 @@ class Logins(Entity):
         self.entity_type = entity_type
         self.id = id
         self.pswd = pswd
+
+
+class SoldBy(Entity):
+    def __init__(self, product_id=None, franchise_id=None):
+        self.product_id = product_id
+        self.franchise_id = franchise_id
+
+
+class ServiceProvidedBy(Entity):
+    def __init__(self, service_id, employee_id):
+        self.service_id = service_id
+        self.employee_id = employee_id
