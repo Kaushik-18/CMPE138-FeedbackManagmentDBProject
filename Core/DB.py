@@ -59,8 +59,10 @@ class DB(object):
             product_feedback = ProductFeedback()
             return product_feedback.from_dict(row)
         elif table == 'employee':
-            return Employee(name=args["f_name"] + args["l_name"], franchise_id=args["franchise_id"],
-                            manager_id=args["manager_id"])
+            emp = Employee(name=args["f_name"] + args["l_name"], franchise_id=args["franchise_id"],
+                           manager_id=args["manager_id"])
+            emp.id = args["employee_id"]
+            return emp
         elif table == 'franchise':
             fran = Franchise()
             fran = fran.from_dict(init_dict=row)

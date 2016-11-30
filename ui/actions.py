@@ -167,29 +167,57 @@ def list_unassigned_feedbacks(self, franchise_id):
     return unassigned_prod_feedbacks
 
 
-# TODO by mgr, franchise
-def insert_action_item(self):
-    start_date = input("Enter start date: ")
-    end_date = input("Enter end date: ")
-    created_by = input("Enter created by: ")
-    assigned_to = input("Enter the ID of assigned employee: ")
+def insert_action_item(self, manager_id, franchise_id):
+    """Assign an action item"""
+    db = Core.DB.DB()
+
+    # TODO: mustDo: format date
+    start_date = raw_input("Enter start date: ")
+    end_date = raw_input("Enter end date: ")
+
+    created_by = manager_id  # input("Enter created by: ")
+    # TODO beautify: print employees in his franchise
+    while 1:
+        assigned_to = input("Enter the ID of assigned employee: ")
+        results = db.query(table='employee', paramsJson={"employee_id": assigned_to,
+                                                         "franchise_id": franchise_id})
+        if len(results) == 1:
+            break
+        elif len(results) == 0:
+            print('The employee ' + str(assigned_to) + ' is not in your franchise ' + str(franchise_id))
+            print ('\nTry again.')
+            continue
     comm = raw_input("Enter comments: ")
     fb_type = raw_input("Enter feedback type (product or service): ")
     fb_id = input("Enter feedback id: ")
-    db = Core.DB.DB()
     values = (start_date, end_date, created_by, assigned_to,
               comm, fb_id)
     db.insert_action_item(values=values,
                           feedback_type=fb_type)
 
 
-def close_action_item(self):
+def close_action_item(self, manager_id):
     db = Core.DB.DB()
     action_items = db.query(table="action_items")
     for action in action_items:
         action.printItem()
     print("---------------------")
-    action_item_id = raw_input("Select an action item from the above list: ")
+
+    # check if s/he is closing the action created by himself
+    while 1:
+        action_item_id = raw_input("Select an action item from the above list: ")
+        results = db.query(table='action_items', paramsJson={'created_by': manager_id})
+        if len(results) == 1:
+            break
+        elif len(results) == 0:
+            print('The action item ' + str(action_item_id) + ' was not created by you.')
+            print('\nTry again')
+            continue
+        elif len(results) > 1:
+            print('Internal Error. Contact administrator')
+            print('\nTry again')
+            continue
+
     action_status = None
     while 1:
         action_status_str = raw_input("Enter 'open' or 'close'")
