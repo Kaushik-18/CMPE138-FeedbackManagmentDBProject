@@ -1,6 +1,5 @@
 import sys
 sys.path.append('..')
-import Core
 import actions
 
 
@@ -9,10 +8,10 @@ class owner_cli:
         while 1:
             prompt_username = 'Enter owner username: '
             inp_username = raw_input(prompt_username)
-            if inp_username == '1':
+            if inp_username == 'root':
                 prompt_paswsword = 'Enter your password: '
                 inp_password = raw_input(prompt_paswsword)
-                if inp_password == '1':
+                if inp_password == 'root':
                     break
                 else:
                     print('Invalid password. Please try again!')

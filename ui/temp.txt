@@ -10,3 +10,13 @@ Traceback (most recent call last):
 OperationalError: (1292, "Incorrect datetime value: '16-04-2016' for column 'start_date' at row 1")
 2016-11-29 20:20:46,381 -    DB -   DEBUG - Executing query 'UPDATE action_items set action_status=%s where action_item_id=%s'
 2016-11-29 20:20:46,394 -  root -   DEBUG - Returned 1 rows
+2016-11-29 20:53:59,782 -    DB -   DEBUG - Executing query 'SELECT * from franchise  where franchise_id =%s'
+2016-11-29 20:53:59,792 -  root -   DEBUG - Returned 1 rows
+2016-11-29 20:54:02,732 -    DB -   DEBUG - Executing query 'SELECT * from sold_by  where product_id =%s AND franchise_id =%s'
+2016-11-29 20:54:22,243 -    DB -   DEBUG - Executing query 'SELECT * from franchise  where franchise_id =%s'
+2016-11-29 20:54:26,379 -    DB -   DEBUG - Executing query 'SELECT * from franchise  where franchise_id =%s'
+2016-11-29 20:54:26,380 -  root -   DEBUG - Returned 1 rows
+2016-11-29 20:54:28,915 -    DB -   DEBUG - Executing query 'SELECT * from sold_by  where product_id =%s AND franchise_id =%s'
+2016-11-29 20:54:28,931 -  root -   DEBUG - Returned 1 rows
+2016-11-29 20:54:43,555 -    DB -   DEBUG - Executing query 'INSERT INTO product_feedback(ratings,customer_id,product_id,comments,franchise_id)VALUES (%s,%s,%s,%s,%s)'
+2016-11-29 20:54:43,568 -  root -   DEBUG - Returned 1 rows

@@ -186,11 +186,15 @@ def insert_action_item(manager_id, franchise_id):
     db = Core.DB.DB()
 
     # TODO: mustDo: format date
-    start_date = raw_input("Enter start date: ")
-    end_date = raw_input("Enter end date: ")
+    start_date = raw_input("Enter start date (YYYY-MM-DD): ")
+    end_date = raw_input("Enter end date (YYYY-MM-DD): ")
 
     created_by = manager_id  # input("Enter created by: ")
     # TODO beautify: print employees in his franchise
+    print 'Employees in your franchise:\n'
+    employees = db.query(table='employee', paramsJson={"franchise_id": franchise_id})
+    for employee in employees:
+        print employee.print_item()
     while 1:
         assigned_to = input("Enter the ID of assigned employee: ")
         results = db.query(table='employee', paramsJson={"employee_id": assigned_to,
