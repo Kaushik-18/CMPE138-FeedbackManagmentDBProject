@@ -187,7 +187,10 @@ class ActionItems(Entity):
             return False
 
     def print_item(self):
-        print "ID : ", self.action_item_id, " comments : ", self.comments, "start date : ", self.start_date, "end date : ", self.end_date
+        print "ID : %s, comments : %s, start date : %s, end date : %s" % \
+            (self.action_item_id, self.comments,
+                self.start_date.strftime("%m-%d-%y %H:%M:%S"),
+                self.end_date.strftime("%m-%d-%y %H:%M:%S"))
 
     def persist(self):
         pass  # TODO implement
