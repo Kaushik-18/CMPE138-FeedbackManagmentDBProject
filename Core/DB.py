@@ -27,6 +27,7 @@ class DB(object):
         queryString = self.formatQuerySting(table, paramsJson, attributes)
         cursor = self.connection.cursor(mysql.cursors.DictCursor)
         cursor.execute(queryString)
+
         rows = cursor.fetchall()
         retval = []
         for row in rows:  # row is a a dict here
@@ -190,7 +191,7 @@ class DB(object):
     #   suggest this is actually a bug in MySql
     # 2 solution is to check if feedback id is already entered using above
     #   function
-    def insert_action_item(self, values, feedback_type):
+    def insert_action_item(self, values, feedback_type, manager_id):
         try:
             cursor = self.connection.cursor()
             if feedback_type == "product":
@@ -250,3 +251,29 @@ class DB(object):
             return cursor.fetchall()
         else:
             return []
+
+    def select_unassgn_fb(self, type, franchise_id):
+        table = None
+        column = None
+        franchise_id = str(franchise_id)
+        if type == 'product':
+            table = 'product_feedback'
+            column = 'product_feedback_id'
+        elif type == 'service':
+            table = 'service_feedback'
+            column = 'service_feedback_id'
+        query = "SELECT * FROM " + table + \
+                " WHERE franchise_id = " + franchise_id + \
+                " AND " + table + "." + column + " not in (" + \
+                " SELECT action_items." + column + " FROM action_items" \
+                                                   " WHERE action_items." + column + " is not null)"
+
+        retval = []
+        cursor = self.connection.cursor()
+        cursor = self.connection.cursor(mysql.cursors.DictCursor)
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        for row in rows:
+            retval.append(self._getObject(table, row))
+
+        return retval

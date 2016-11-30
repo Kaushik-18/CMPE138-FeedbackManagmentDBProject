@@ -1,3 +1,4 @@
+import pprint
 from abc import ABCMeta
 
 import Core.DB
@@ -31,6 +32,9 @@ class Entity(object):
         for key in init_dict:
             setattr(self, key, init_dict[key])
         return self
+
+    def printItem(self):
+        pprint.pprint(self.__dict__)
 
 
 class Customer(Entity):
@@ -89,7 +93,6 @@ class Feedback(Entity):
 
     def print_item(self):
         pass  # TODO
-
 
 class ProductFeedback(Feedback):
     def __init__(self, rating=0, comments="", customer_id=0, item_id=0,
@@ -164,8 +167,8 @@ class ServiceFeedback(Feedback):
                                    self.comments, self.franchise_id))
 
 
-class ActionItems:
-    def __init__(self, action_item_id, start_date, end_date, action_status, assigned_to=None,
+class ActionItems(Entity):
+    def __init__(self, action_item_id=None, start_date=None, end_date=None, action_status=None, assigned_to=None,
                  created_by=None, comments=None, service_feedback_id=None, product_feedback_id=None):
         self.assigned_to = assigned_to
         self.action_item_id = action_item_id

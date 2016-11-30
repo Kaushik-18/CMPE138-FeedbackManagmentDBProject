@@ -36,7 +36,8 @@ INSERT INTO service_feedback (service_feedback.service_feedback_id,service_feedb
 (7,4,10001,5,1,"I could smell a dead rat somewhere"),
 (8,4,10007,2,1,"There is too long a wait at the billing counter. And then i have spent extra time, writing this review"),
 (9,3,10007,5,5,"My baby puked, but the cleaner cleant the stop promptly. A word of appreciation to him from myside"),
-(10,2,10007,2,3,"Too long a queue for a clothing store :( ");
+(10,2,10007,2,3,"Too long a queue for a clothing store :( "),
+(11,4,10001,3,3,"long queues and slow cashiers");
 
 
 #action item
