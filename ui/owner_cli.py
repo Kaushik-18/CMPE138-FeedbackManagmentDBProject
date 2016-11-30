@@ -1,6 +1,7 @@
+import sys
+sys.path.append('..')
 import Core
 import actions
-import sys
 
 
 class owner_cli:

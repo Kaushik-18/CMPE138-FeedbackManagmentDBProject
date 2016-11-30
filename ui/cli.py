@@ -130,7 +130,7 @@ class Cli:
         emp = emp_list[0]
 
         while 1:
-            emp.printEmployee()
+            emp.print_employee_entity()
             print('Home.\n'
                   'Welcome !\n')
             prompt = ("\n"
@@ -231,7 +231,7 @@ class Cli:
 
         emp = mgr_list[0]
         while 1:
-            emp.printEmployee()
+            emp.print_employee_entity()
             print('Home.\n'
                   'Welcome !\n')
             prompt = ("\n"
